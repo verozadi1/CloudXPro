@@ -1339,10 +1339,10 @@
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tokusatsuindo.com&size=%size%",
-        "fileHash": "sha256-b48169d0b6fa11e5bade9bcdd63ad8db586f545faca6822b6e988b99a49ae242",
+        "fileHash": "sha256-3d54f327d0c0ce2c7fd4e1b557cec435c53b82434288329dcef51b1e5f745466",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
-        "fileSize": 12602,
+        "fileSize": 13182,
         "status": 1,
         "language": "id",
         "authors": [
@@ -1355,7 +1355,7 @@
         ],
         "version": 1,
         "internalName": "TokusatsuIndo",
-        "description": "Tokusatsu Indo",
+        "description": "Tokusatsu Indo\ud83c\udfcd",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/TokusatsuIndo.cs3",
         "name": "TokusatsuIndo"
     },
