@@ -18,11 +18,13 @@ class TokusatsuindoProvider : MainAPI() {
         TvType.Movie
     )
 
-	// ==========================================
-    // 1. DAFTAR TAB BARIS (Silakan ubah/tambah sesuai nama link webnya)
+    // ==========================================
+    // 1. DAFTAR TAB BARIS 
+    // (Pastikan URL di webnya memang tanpa kata 'category/', 
+    // jika ternyata pakai, ubah jadi "category/kamen-rider/")
     // ==========================================
     override val mainPage = mainPageOf(
-        "" to "Latest Update", // Jangan diubah, ini untuk halaman depan utama
+        "" to "Latest Update", 
         "kamen-rider/" to "Kamen Rider",
         "super-sentai/" to "Super Sentai",
         "ultraman/" to "Ultraman",
@@ -34,26 +36,12 @@ class TokusatsuindoProvider : MainAPI() {
     // 2. MESIN PENGAMBIL DATA UNTUK SEMUA TAB
     // ==========================================
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        // Logika otomatis menggabungkan nama web dengan kategori di tab
-        // Jika hal 1 = tokusatsuindo.com/category/kamen-rider/
-        // Jika hal 2 = tokusatsuindo.com/category/kamen-rider/page/2/
         val url = if (page == 1) {
             "$mainUrl/${request.data}"
         } else {
             "$mainUrl/${request.data}page/$page/"
         }
         
-        val document = app.get(url).document
-        
-        val items = document.select("article.item").mapNotNull { it.toSearchResult() }
-        val hasNext = document.select(".next.page-numbers").isNotEmpty() || items.isNotEmpty()
-        
-        return newHomePageResponse(request.name, items, hasNext = hasNext)
-    }
-
-    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        // Jika page 1, url-nya mainUrl, jika lebih dari 1 pake format /page/2/
-        val url = if (page == 1) mainUrl else "$mainUrl/page/$page/"
         val document = app.get(url).document
         
         val items = document.select("article.item").mapNotNull { it.toSearchResult() }
@@ -89,21 +77,17 @@ class TokusatsuindoProvider : MainAPI() {
         val episodeElements = document.select("ul.lcp_catlist li a")
 
         return if (episodeElements.isNotEmpty()) {
-            // ==========================================
-            // KONDISI 1: HALAMAN SERIES (Ada List Episode)
-            // ==========================================
             val episodes = episodeElements.mapNotNull { ep ->
                 val epUrl = ep.attr("href").takeIf { it.isNotBlank() } ?: return@mapNotNull null
                 val epTitle = ep.text().trim()
                 
-                // Ambil angka episode dari teks
                 val epNum = Regex("""(?i)episode\s*(\d+(?:\.\d+)?)""").find(epTitle)?.groupValues?.getOrNull(1)?.toFloatOrNull()
                 
                 newEpisode(epUrl) {
                     this.name = epTitle
                     this.episode = epNum?.toInt()
                 }
-            }.reversed() // Di-reverse karena di web episode paling baru ada di atas
+            }.reversed()
 
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
                 this.posterUrl = poster
@@ -111,9 +95,6 @@ class TokusatsuindoProvider : MainAPI() {
                 this.tags = tags
             }
         } else {
-            // ==========================================
-            // KONDISI 2: HALAMAN MOVIE / SINGLE EPISODE (Langsung Iframe Player)
-            // ==========================================
             newMovieLoadResponse(title, url, TvType.Movie, url) {
                 this.posterUrl = poster
                 this.plot = description
@@ -122,7 +103,7 @@ class TokusatsuindoProvider : MainAPI() {
         }
     }
 
-override suspend fun loadLinks(
+    override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
         subtitleCallback: (SubtitleFile) -> Unit,
@@ -132,27 +113,22 @@ override suspend fun loadLinks(
         val htmlText = document.html()
         var linkFound = false
 
-        // Wadah untuk ngumpulin semua link yang ketemu
         val allLinks = mutableListOf<String>()
 
-        // 1. Ambil dari tag iframe biasa
         document.select("iframe").forEach {
             val src = it.attr("data-src").takeIf { s -> s.isNotBlank() } ?: it.attr("src")
             if (src.isNotBlank()) allLinks.add(src)
         }
 
-        // 2. Jurus Regex khusus nangkap link GDPlayer & Google Drive yang tersembunyii
         val regex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"']+)""")
         regex.findAll(htmlText).forEach { match ->
             allLinks.add(match.groupValues[1])
         }
 
-        // Hapus link yang dobel/duplikat, lalu eksekusi satu per satu
         allLinks.distinct().forEach { url ->
             val fixedUrl = if (url.startsWith("//")) "https:$url" else url
             
             runCatching {
-                // loadExtractor Cloudstream sudah punya mesin bawaan untuk membongkar gdplayer.to
                 loadExtractor(fixedUrl, data, subtitleCallback, callback)
                 linkFound = true
             }
@@ -161,18 +137,15 @@ override suspend fun loadLinks(
         return linkFound
     }
 
-    // Fungsi bantuan untuk parsing data card di Homepage dan Search
     private fun Element.toSearchResult(): SearchResponse? {
         val titleElement = selectFirst(".entry-title a") ?: return null
         val title = titleElement.text().trim()
         val href = titleElement.attr("href").takeIf { it.isNotBlank() } ?: return null
         
-        // Coba ambil dari tag img.wp-post-image
         val poster = selectFirst("img.wp-post-image")?.let { img ->
             img.attr("src").takeIf { it.isNotBlank() } 
         }
 
-        // Return sementara sebagai TvSeries, nanti akan di validasi fix-nya saat di masuk fungsi load()
         return newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
             this.posterUrl = poster
         }
