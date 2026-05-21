@@ -1,0 +1,1447 @@
+[
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.club&size=%size%",
+        "fileHash": "sha256-5a1d8c37ca4c67bb547b6851235dddca9f5696b0848ec0a80f0c38f5e5ffcab7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 32637,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92",
+            "CodeSanzz"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "Cartoon"
+        ],
+        "version": 25,
+        "internalName": "AnichinMoe",
+        "description": "Anichin Moe",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnichinMoe.cs3",
+        "name": "AnichinMoe"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v1.animasu.top&size=%size%",
+        "fileHash": "sha256-62490d1a4b5dc3cd1f3ba5e04f4a314eb528cba98cea476470cb76f7a2272306",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24893,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 2,
+        "internalName": "Animasu",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Animasu.cs3",
+        "name": "Animasu"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://154.26.137.28&size=%size%",
+        "fileHash": "sha256-0a878eda25e4851214277d507ff5f4c637a4a800006aaa3079e6123708befc46",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 60321,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated, Duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 2,
+        "internalName": "AnimeSailProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnimeSailProvider.cs3",
+        "name": "AnimeSailProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://animexin.dev&size=%size%",
+        "fileHash": "sha256-93b47ed3c98a9caf125a6b290915a3e2579dcd6f1a450bfea86ab67d87f74576",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 27585,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "AnimexinProvider",
+        "description": "AnimeXin",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnimexinProvider.cs3",
+        "name": "AnimexinProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anixcafe.com&size=%size%",
+        "fileHash": "sha256-c39f009948e8696710a48fe66a0db58ecb5e67ae962b7a015b3b41046490b977",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 27487,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "AnixCafeProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnixCafeProvider.cs3",
+        "name": "AnixCafeProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://anoboy.be&size=%size%",
+        "fileHash": "sha256-53cac281b5bb6d5fd50d8a466eb45107efe9199a1a884a3a1af0f11d198c3eef",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 58235,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 3,
+        "internalName": "Anoboy",
+        "description": "Anoboy",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Anoboy.cs3",
+        "name": "Anoboy"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://auratail.vip&size=%size%",
+        "fileHash": "sha256-2acaf24739f86357c581582418e5279e3f6d750b80a07a3e4d5122cc23200ab1",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 36267,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "AuraTail",
+        "description": "AuraTail Donghua",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AuraTail.cs3",
+        "name": "AuraTail"
+    },
+    {
+        "iconUrl": "https://www.themoviedb.org/favicon.ico",
+        "fileHash": "sha256-0e0c1bcd67d19ee1c444cd4fbf67aa0eb262a2dacc555936cb12ff4b2e256eeb",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 62259,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "AutoEmbedProvider",
+        "description": "AutoEmbed TMDB-backed movie and TV catalog provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AutoEmbedProvider.cs3",
+        "name": "AutoEmbedProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://azmovies.to&size=%size%",
+        "fileHash": "sha256-9467e21864b03ea06e81a03b7ea45a2d28079118466280bd5ec545635f152033",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 53928,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "Azmovies",
+        "description": "Azmovies",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Azmovies.cs3",
+        "name": "Azmovies"
+    },
+    {
+        "fileHash": "sha256-ba8f8ebc2805c86d78d2e29e50a934d5d54d648931941b14c4930e45664d5924",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 56784,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "OpenAI"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie"
+        ],
+        "version": 1,
+        "internalName": "BstationProvider",
+        "description": "Provider anime Bstation region Indonesia",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/BstationProvider.cs3",
+        "name": "BstationProvider"
+    },
+    {
+        "iconUrl": "https://raw.githubusercontent.com/phisher98/TVVVV/refs/heads/main/Icons/Cinemacity.png",
+        "fileHash": "sha256-16b868c19965faec57112ddb0069061a0475cf74afd5aa33283afbdbc107f6b9",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 55046,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Phisher98"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 7,
+        "internalName": "CinemacityProvider",
+        "description": "Watch Movies & TvSeries (Multi-Lang/Audio)",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/CinemacityProvider.cs3",
+        "name": "CinemacityProvider"
+    },
+    {
+        "iconUrl": "https://klikxxi.me/wp-content/uploads/2024/02/cropped-site-icon.png",
+        "fileHash": "sha256-9b32ba5824195ded8af34c410bc4453bb38c9150170b287265dae2268828e567",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 236504,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Miku"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "Cinemax21Provider",
+        "description": "CineMax21 \u2014 Streaming Movie and TV Series",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Cinemax21Provider.cs3",
+        "name": "Cinemax21Provider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://donghub.vip&size=%size%",
+        "fileHash": "sha256-101455e5ff9f27b77928538e11f74f96eab1edab621d603c6ec8fa9b0e85b617",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 18879,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92",
+            "CodeSannz"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "Cartoon"
+        ],
+        "version": 6,
+        "internalName": "Donghub",
+        "description": "Anime and Movies",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Donghub.cs3",
+        "name": "Donghub"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drakorid.co&size=%size%",
+        "fileHash": "sha256-f6b53b552967e6a38d9734c74ddf826283d9cceb749f5466e3fdeb558b414060",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 22682,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Codex"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "DrakoridProvider",
+        "description": "Drakor.id",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/DrakoridProvider.cs3",
+        "name": "DrakoridProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama.sansekai.my.id&size=%size%",
+        "fileHash": "sha256-41e725482248b5af241d6f13b677ec2573bae139906e7b3763e1829d916ade8f",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 39916,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "Dramabox",
+        "description": "DramaBox provider via Sansekai API",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Dramabox.cs3",
+        "name": "Dramabox"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.dubbindo.site&size=%size%",
+        "fileHash": "sha256-0dc4ee23709252d9a8a5305a348e8b5fd83b679453882e5340bd8e03c51aff3f",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 16712,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "AnimeMovie",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "DubbindoProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/DubbindoProvider.cs3",
+        "name": "DubbindoProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://justilien.com&size=%size%",
+        "fileHash": "sha256-486ed02843c25b0d7568d73c15fc9500ea435f774840545b7478373de34c5ea3",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 41624,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 16,
+        "internalName": "Dutamovie",
+        "description": "DutaMovie",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Dutamovie.cs3",
+        "name": "Dutamovie"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://filmapik.singles&size=%size%",
+        "fileHash": "sha256-4ffbd53287b8c7d3531cc2c548636c865af6b586a1bf30009fd4db4caf0c4687",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24312,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92",
+            "CodeSanzz"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 3,
+        "internalName": "FilmApik",
+        "description": "Filmapik",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/FilmApik.cs3",
+        "name": "FilmApik"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://s3.iix.llc&size=%size%",
+        "fileHash": "sha256-53728b30642aee5fb192e6da405f8b87fe666eaa0a2eb5d8a2dcb9b70d614bc5",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 25728,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "Filmkita",
+        "description": "Filmkita",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Filmkita.cs3",
+        "name": "Filmkita"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://free-reels.com&size=%size%",
+        "fileHash": "sha256-2b90ccc5f0be43331f8bdb4b14135a52d2c0d5540796b1a1a56fb3fc574eb26b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 71370,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "FreeReels",
+        "description": "FreeReels short drama provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/FreeReels.cs3",
+        "name": "FreeReels"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://fufafilm.com&size=%size%",
+        "fileHash": "sha256-4ddecdbfa876f516056060d7b9e8c6ff91cd28e04bdae63abb1f5a0d35d3306d",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 27856,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 3,
+        "internalName": "Fufafilm",
+        "description": "Fufafilm",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Fufafilm.cs3",
+        "name": "Fufafilm"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://funmovieslix.com&size=%size%",
+        "fileHash": "sha256-ce12fb217eda24d8e884aaf5c0fbfc78ef49e50b4e806cc7a555aa2bccff8e0d",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 37995,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Phisher98"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 3,
+        "internalName": "Funmovieslix",
+        "description": "Indonesia Source",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Funmovieslix.cs3",
+        "name": "Funmovieslix"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gojodesu.com&size=%size%",
+        "fileHash": "sha256-0931265b694e5d72cdd4398e45b4789a160f73e8984e842e5ea2d5dcc2319c04",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 25433,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "GojodesuProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/GojodesuProvider.cs3",
+        "name": "GojodesuProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v8.hidoristream.online&size=%size%",
+        "fileHash": "sha256-a199cce70aac1d0f8fa8faab152d41c44a88dc0011a501cbcc1913ee6b2e702e",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 49167,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "Hidoristream",
+        "description": "Hidoristream",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Hidoristream.cs3",
+        "name": "Hidoristream"
+    },
+    {
+        "iconUrl": "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://idlixian.com&size=16",
+        "fileHash": "sha256-f4b090ee3bba144257940227d110a1e4dafe70603974ae684cfa4ee2c11a0224",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 39387,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 6,
+        "internalName": "IdlixProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/IdlixProvider.cs3",
+        "name": "IdlixProvider"
+    },
+    {
+        "iconUrl": "https://homecookingrocks.com/wp-content/uploads/2024/10/cropped-indomax21-favicon-color-1.png",
+        "fileHash": "sha256-c6bf0c183001b1a3835aa86a9b9594509986956146ed4124f8ad8f34667c5802",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 26044,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Miku"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 3,
+        "internalName": "IndoMax21Provider",
+        "description": "IndoMax21 \u2014 Streaming Anime, Donghua, Hentai, Porn, Movie and TV Series",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/IndoMax21Provider.cs3",
+        "name": "IndoMax21Provider"
+    },
+    {
+        "iconUrl": "https://missav.ws/missav/logo-square.png",
+        "fileHash": "sha256-7c85c08b533eaf1a11ddaa8fab45ca8006f38140fad7e89111b518e12e3eeda7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 22166,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Anomali"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 10,
+        "internalName": "JavHey",
+        "description": "Best Japan AV porn site, free forever, high speed, no lag, over 100,000 videos, daily update, no ads while playing video.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JavHey.cs3",
+        "name": "JavHey"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://tv2.kawanfilm21.co&size=%size%",
+        "fileHash": "sha256-0c59308bf307dac4c692643daa342edcf564ecb772ecad1e08075fe38dc72973",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24727,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 5,
+        "internalName": "Kawanfilm",
+        "description": "Kawanfilm",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Kawanfilm.cs3",
+        "name": "Kawanfilm"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://sv4.kazefuri.cloud&size=%size%",
+        "fileHash": "sha256-8d784808d1a60c495b2c601ef9dc82e671a56f01b2a39624fe848df1cedc237c",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 41897,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "KazefuriProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KazefuriProvider.cs3",
+        "name": "KazefuriProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://kissasian.cam&size=%size%",
+        "fileHash": "sha256-e265c4224b4bb1238b848c8b64f0feea8a036fb7b88013660ae85c7fbdae8888",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 30015,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "Kissasian",
+        "description": "Kissasian",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Kissasian.cs3",
+        "name": "Kissasian"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://kisskh.ovh&size=%size%",
+        "fileHash": "sha256-2f2d29860d6eff62ee01f123d2d0433e6d8ec18797af7c1696255c1c8284e007",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 30554,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Anime",
+            "Movie"
+        ],
+        "version": 16,
+        "internalName": "KisskhProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KisskhProvider.cs3",
+        "name": "KisskhProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://kitanonton2.guru&size=%size%",
+        "fileHash": "sha256-fb5127639a1eb86d7aa9782e9158047754ef69be2ba9e3044602da85afddeee3",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 38476,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "AsianDrama",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "KitanontonProvider",
+        "description": "Kitanonton",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KitanontonProvider.cs3",
+        "name": "KitanontonProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://klikxxi.fit&size=%size%",
+        "fileHash": "sha256-cd6042d5390fe7e3c148d2fea57a6150287c108745ea6185ff7f23b5241c9c33",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 35875,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 9,
+        "internalName": "Klikxxi",
+        "description": "Klikxxi",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Klikxxi.cs3",
+        "name": "Klikxxi"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v17.kuramanime.ink&size=%size%",
+        "fileHash": "sha256-a7705d7831c4f59271f5d68b464298e5a96999a608f3d3b8ea7c7480c330008b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 50381,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "Kuramanime",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Kuramanime.cs3",
+        "name": "Kuramanime"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://kuronime.sbs&size=%size%",
+        "fileHash": "sha256-205a4b1d2219eef7a6a50925e15b5f40b604de984e42d54345704350267d061b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 37491,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "KuronimeProvider",
+        "description": "Kuronime",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KuronimeProvider.cs3",
+        "name": "KuronimeProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://layarasia.site&size=%size%",
+        "fileHash": "sha256-c87a0e416600cfce8bb6232dc26fa0811ab70584ce91f37dce6513a148d1b834",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 27090,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 3,
+        "internalName": "Layarasia",
+        "description": "Layarasia",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Layarasia.cs3",
+        "name": "Layarasia"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=tv7.lk21.am.in&sz=%size%",
+        "fileHash": "sha256-4a00a19730ea530370746662a33ccd06b2bc3b3aeef46647d0548390db031c20",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 31369,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated,Phisher98"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 11,
+        "internalName": "LayarKacaProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/LayarKacaProvider.cs3",
+        "name": "LayarKacaProvider"
+    },
+    {
+        "iconUrl": "http://mangoporn.net/wp-content/uploads/2024/07/mangoporn.net_.png",
+        "fileHash": "sha256-2ecd7d90e02d21f925452d195f092881dd35a74134a0f3a3aef678c82461122d",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 19068,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Anomali"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 4,
+        "internalName": "Mangoporn",
+        "description": "MangoPorn",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Mangoporn.cs3",
+        "name": "Mangoporn"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://melolo.com&size=%size%",
+        "fileHash": "sha256-75a32f4cbabc88613e0546c00b860878052499f08043c86ac59b020fcaae669f",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 30776,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "AsianDrama"
+        ],
+        "version": 3,
+        "internalName": "Melolo",
+        "description": "Melolo short drama provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Melolo.cs3",
+        "name": "Melolo"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://tv11.melongmovies.com&size=%size%",
+        "fileHash": "sha256-18dd7ae592b3c90afa803e85aeda6fb1702412fe40ad8fa09bd926873266f64c",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 22562,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 9,
+        "internalName": "Melongmovie",
+        "description": "Melongmovie",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Melongmovie.cs3",
+        "name": "Melongmovie"
+    },
+    {
+        "iconUrl": "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://ssstik.tv&size=16",
+        "fileHash": "sha256-43aa00a45034c77e451af8325afc2347181a82c1f871b21b18ac71017f36971a",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 32354,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 2,
+        "internalName": "Midasxxi",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Midasxxi.cs3",
+        "name": "Midasxxi"
+    },
+    {
+        "iconUrl": "https://missav.ws/missav/logo-square.png",
+        "fileHash": "sha256-42dd84d4ed52d9e7402109614b12d71b7fe397c919b78cdcfd64193cff5ba1d6",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 17777,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Anomali"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 11,
+        "internalName": "MissAv",
+        "description": "Best Japan AV porn site, free forever, high speed, no lag, over 100,000 videos, daily update, no ads while playing video.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/MissAv.cs3",
+        "name": "MissAv"
+    },
+    {
+        "iconUrl": "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/raw/refs/heads/master/MovieBoxProvider/icon.png",
+        "fileHash": "sha256-bb83ddaca917a3ea375a7af0c2bc2d9d74b1bd5ca75a40891efcde1ef9dc1500",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 38420,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "NivinCNC,Phisher98"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 12,
+        "internalName": "MovieBoxProvider",
+        "description": "Multi Language Movies and Series Provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/MovieBoxProvider.cs3",
+        "name": "MovieBoxProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://nekokun.my.id&size=%size%",
+        "fileHash": "sha256-8a393d0b2023a5811eae32ededb20ee06e8965e4ee31b66af2578370824bbbd5",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 29433,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "NekokunProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NekokunProvider.cs3",
+        "name": "NekokunProvider"
+    },
+    {
+        "iconUrl": "https://raw.githubusercontent.com/Sushan64/NetMirror-Extension/refs/heads/master/Netmirror/logo.jpeg",
+        "fileHash": "sha256-93359970af1c466309f78dbeefbcedc504fb088f15dd85a20c5ac5c9608b10f7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 52644,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "NetMirrorProvider",
+        "description": "NetMirror search and streaming provider with live playlist fallback.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NetMirrorProvider.cs3",
+        "name": "NetMirrorProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://new18.ngefilm.site&size=%size%",
+        "fileHash": "sha256-78c6808db4216343437b2fe6d8d6f949a6d37adf6580649aa3b493d6ec5742f3",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 23763,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 10,
+        "internalName": "Ngefilm",
+        "description": "Ngefilm",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Ngefilm.cs3",
+        "name": "Ngefilm"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://nimegami.id&size=%size%",
+        "fileHash": "sha256-0b5af10b2d51c7bdf11b0e98a8a9a7429b0c8fb4cd04da8ac116603804264b9d",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 36756,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 1,
+        "internalName": "NimegamiProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NimegamiProvider.cs3",
+        "name": "NimegamiProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://nomat.site&size=%size%",
+        "fileHash": "sha256-1bb987add854edc2f61320a57d3547bd5d60073686cb3fd11e2d872996452520",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 17458,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "Nomat",
+        "description": "Nomat",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Nomat.cs3",
+        "name": "Nomat"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://s11.nontonanimeid.boats&size=%size%",
+        "fileHash": "sha256-72b743f9e07e4e1d6d85016ed94cd93586cfceb1b9bfb027b90fada3bb1bce2a",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 58169,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated, Duro92"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 22,
+        "internalName": "NontonAnimeIDProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NontonAnimeIDProvider.cs3",
+        "name": "NontonAnimeIDProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=onetouchtv.xyz/&sz=%size%",
+        "jarFileSize": 166595,
+        "fileHash": "sha256-e3ee8e73f5df87d67cca13e2fddf01e876930db4bb2e8aa1e801ec880f6e1b34",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 37380,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Phisher98"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "OneTouchTV",
+        "jarUrl": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/OneTouchTV.jar",
+        "description": "Asian Dramas",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/OneTouchTV.cs3",
+        "name": "OneTouchTV",
+        "jarHash": "sha256-677f1fa7c0f9524577f677b37be3b0b9b75703c9e932a9ac59f7d8903abba25b"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anime.oploverz.ac&size=%size%",
+        "fileHash": "sha256-10ab8128cb3c6c25210809d5eda2e284d3f028f1b8a59603e7056af0c2c63f39",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 26944,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92",
+            "CodeSanzz"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 31,
+        "internalName": "OploverzProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/OploverzProvider.cs3",
+        "name": "OploverzProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://45.11.57.243&size=%size%",
+        "fileHash": "sha256-2b445ba626a1c201ab1a14d99dbb80f3c733d7dab1e7c5956d278ff65e8d291c",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 21853,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 15,
+        "internalName": "Oppadrama",
+        "description": "Oppadrama",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Oppadrama.cs3",
+        "name": "Oppadrama"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://otakudesu.cloud&size=%size%",
+        "fileHash": "sha256-c1773279db49af5e6c9eabeacb51d51a71e8cff825ad62a58ef05a298af53ad2",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24745,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Hexated"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 3,
+        "internalName": "OtakudesuProvider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/OtakudesuProvider.cs3",
+        "name": "OtakudesuProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://ww03.pencurimovie.bond&size=%size%",
+        "fileHash": "sha256-86061670a28645bac4a8feed3adf08df3c40ca4bbdf7deef184af527b6777612",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 15312,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Phisher98"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 8,
+        "internalName": "Pencurimovie",
+        "description": "Pencurimovie ",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Pencurimovie.cs3",
+        "name": "Pencurimovie"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://ww192.pencurimoviesubmalay.motorcycles&size=%size%",
+        "fileHash": "sha256-7b25a50714127723a3e4c885ead6a47dbd0adc94c0b190afc1a9ab39f03eba96",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 31246,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "Pmsm",
+        "description": "PMSM (Pencuri Movie Sub Malay)",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Pmsm.cs3",
+        "name": "Pmsm"
+    },
+    {
+        "iconUrl": "https://podjav.tv/wp-content/uploads/2025/02/favicon-podjav.ico",
+        "fileHash": "sha256-8ffa9aa5283ee2b75b3c8542b3871bd378e8619c9edbf7c2f5dce16150afe5b3",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 20010,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Anomali"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 9,
+        "internalName": "PODJAV",
+        "description": "Best Japan AV porn site, free forever, high speed, no lag, over 100,000 videos, daily update, no ads while playing video.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/PODJAV.cs3",
+        "name": "PODJAV"
+    },
+    {
+        "iconUrl": "https://www.pornhub.com/favicon.ico",
+        "fileHash": "sha256-24b7245be5b3be1b4a97a8693fcd0799de5273f5c5f5a886fd45cff54747cd71",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 17314,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "aldey84"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 10,
+        "internalName": "Pornhub",
+        "description": "Awas Jangan Coli Kawan",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Pornhub.cs3",
+        "name": "Pornhub"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v3.pusatfilm21info.com&size=%size%",
+        "fileHash": "sha256-ccfeaf3798222c07c5d5aca449982eea32092888336d3fb64594cac1a36b5f1b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 30967,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "Pusatfilm21Provider",
+        "description": "Pusatfilm21",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Pusatfilm21Provider.cs3",
+        "name": "Pusatfilm21Provider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v1.samehadaku.how&size=%size%",
+        "fileHash": "sha256-7c6ecee00e6e308efc5ee774d10b0d375b2b84f7540687906c0b48b0745e0845",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 17272,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92",
+            "CodeSanzz"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 25,
+        "internalName": "Samehadaku",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Samehadaku.cs3",
+        "name": "Samehadaku"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://sflix.film&size=%size%",
+        "fileHash": "sha256-cc490b3fa01f56572b6ef81d1af8fe8cbbee026fa7d29f99be30cd7e8ec094d9",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 35669,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "Sflix",
+        "description": "Sflix - Movie & Series subtitle indonesia",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Sflix.cs3",
+        "name": "Sflix"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://sontolfilm.com&size=%size%",
+        "fileHash": "sha256-3d13b0d1d83178e26cabadecedadf920af87aae4a810ae22971499c6c8e9e679",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 25377,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "SontolFilmProvider",
+        "description": "SontolFilm",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/SontolFilmProvider.cs3",
+        "name": "SontolFilmProvider"
+    },
+    {
+        "iconUrl": "https://github.com/duro92/ExtCloud/blob/main/SoraStream/Icon.png",
+        "fileHash": "sha256-1a68090cb44ad9c019b1ba64b28d7b6d65f5bcf33ae92a502c5844e7e4c2dd85",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 283943,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Hexated",
+            "Sora"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Anime",
+            "Movie"
+        ],
+        "version": 237,
+        "internalName": "SoraStream",
+        "description": "#1 best extention based on MultiAPI",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/SoraStream.cs3",
+        "name": "SoraStream"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tokusatsuindo.com&size=%size%",
+        "fileHash": "sha256-57af1ee987b9e20197ea5229bfe0fdb5919b5770e41459de45183864c7b21fd9",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 12557,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "verozadi"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "TokusatsuIndo",
+        "description": "Tokusatsu Indo",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/TokusatsuIndo.cs3",
+        "name": "TokusatsuIndo"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://winbu.net&size=%size%",
+        "fileHash": "sha256-0663a033c92ea031bec14ab557354deeac55d566f9ce9c8638a6f0cdc47ee74b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 32843,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "Anime",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "Winbu",
+        "description": "Winbu",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Winbu.cs3",
+        "name": "Winbu"
+    },
+    {
+        "iconUrl": "https://static.xhpingcdn.com/xh-mobile/images/favicon/favicon-v2-512x512.png?v=1",
+        "fileHash": "sha256-49d2888fe5343994eb726fc21283891b5f841ba732a89cfe59c29b1cb17c7848",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 16028,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Anomali"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 9,
+        "internalName": "Xhamster",
+        "description": "Awas Jangan Coli Kawan",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Xhamster.cs3",
+        "name": "Xhamster"
+    },
+    {
+        "iconUrl": "https://yflix.to/favicon.ico",
+        "fileHash": "sha256-a99117e09d385a2c81665f79fce13dcef4061c2e046a050121b4762bf3fd75ca",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 52781,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "YflixProvider",
+        "description": "Yflix TMDB-backed movie and TV catalog provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/YflixProvider.cs3",
+        "name": "YflixProvider"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://zoronime.online&size=%size%",
+        "fileHash": "sha256-53c83987dca1e12076b5cd67ce3ba37e9c7eb99fc28b332be98019fbf94ab690",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 38388,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Duro92"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "ZoronimeProvider",
+        "description": "Zoronime",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/ZoronimeProvider.cs3",
+        "name": "ZoronimeProvider"
+    }
+]
