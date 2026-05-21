@@ -102,9 +102,11 @@ class TokusatsuindoProvider : MainAPI() {
     ): Boolean {
         val document = app.get(data).document
 
-        // Scrape iframe player yang ada di dalam class entry-content (Termasuk iframe Google Drive)
-        val iframes = document.select(".entry-content iframe[src]")
-            .mapNotNull { it.attr("src").takeIf { src -> src.isNotBlank() } }
+        // Cari SEMUA iframe di halaman, cek 'data-src' dulu (jika web pakai lazy-load), baru cek 'src'
+        val iframes = document.select("iframe").mapNotNull {
+            it.attr("data-src").takeIf { src -> src.isNotBlank() }
+                ?: it.attr("src").takeIf { src -> src.isNotBlank() }
+        }
 
         var linkFound = false
 
