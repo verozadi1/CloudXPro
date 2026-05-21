@@ -3,11 +3,9 @@ package com.tokusatsuindo
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.loadExtractor
-import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-// Nama KTP sudah disamakan: huruf I besar!
 class TokusatsuIndoProvider : MainAPI() {
     override var mainUrl = "https://www.tokusatsuindo.com"
     override var name = "Tokusatsu Indo🏍"
@@ -103,10 +101,10 @@ class TokusatsuIndoProvider : MainAPI() {
 
         // === TRIK RADAR DETEKTOR ===
         if (postId.isEmpty()) {
-            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", Qualities.Unknown.value, false))
+            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
             return true 
         } else {
-            callback.invoke(ExtractorLink("RADAR", "POST ID: $postId", "https://google.com", "", Qualities.Unknown.value, false))
+            callback.invoke(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
         }
 
         // 2. TEMBAK AJAX MUVIPRO
@@ -128,9 +126,9 @@ class TokusatsuIndoProvider : MainAPI() {
 
                 // === TRIK RADAR: Cek Balasan ===
                 if (response.isBlank() || response.trim() == "0") {
-                    callback.invoke(ExtractorLink("RADAR", "Kosong di $tab", "https://google.com", "", Qualities.Unknown.value, false))
+                    callback.invoke(ExtractorLink("RADAR", "Kosong di $tab", "https://google.com", "", 0, false))
                 } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback.invoke(ExtractorLink("RADAR", "Iframe ADA ($tab)!", "https://google.com", "", Qualities.Unknown.value, false))
+                    callback.invoke(ExtractorLink("RADAR", "Iframe ADA di $tab!", "https://google.com", "", 0, false))
                 }
 
                 // 3. AMBIL LINK IFRAME
