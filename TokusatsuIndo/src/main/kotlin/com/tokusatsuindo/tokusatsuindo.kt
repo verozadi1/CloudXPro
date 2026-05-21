@@ -18,10 +18,38 @@ class TokusatsuindoProvider : MainAPI() {
         TvType.Movie
     )
 
-    // Homepage standar WordPress
+	// ==========================================
+    // 1. DAFTAR TAB BARIS (Silakan ubah/tambah sesuai nama link webnya)
+    // ==========================================
     override val mainPage = mainPageOf(
-        "page/%d/" to "Latest Update"
+        "" to "Latest Update", // Jangan diubah, ini untuk halaman depan utama
+        "kamen-rider/" to "Kamen Rider",
+        "super-sentai/" to "Super Sentai",
+        "ultraman/" to "Ultraman",
+        "other-tokusatsu/" to "Other Tokusatsu",
+        "movie/" to "Movie & Special"
     )
+
+    // ==========================================
+    // 2. MESIN PENGAMBIL DATA UNTUK SEMUA TAB
+    // ==========================================
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+        // Logika otomatis menggabungkan nama web dengan kategori di tab
+        // Jika hal 1 = tokusatsuindo.com/category/kamen-rider/
+        // Jika hal 2 = tokusatsuindo.com/category/kamen-rider/page/2/
+        val url = if (page == 1) {
+            "$mainUrl/${request.data}"
+        } else {
+            "$mainUrl/${request.data}page/$page/"
+        }
+        
+        val document = app.get(url).document
+        
+        val items = document.select("article.item").mapNotNull { it.toSearchResult() }
+        val hasNext = document.select(".next.page-numbers").isNotEmpty() || items.isNotEmpty()
+        
+        return newHomePageResponse(request.name, items, hasNext = hasNext)
+    }
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         // Jika page 1, url-nya mainUrl, jika lebih dari 1 pake format /page/2/
