@@ -3,6 +3,8 @@ package com.tokusatsuindo
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.cloudstream3.utils.Qualities
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
 class TokusatsuindoProvider : MainAPI() {
@@ -18,11 +20,6 @@ class TokusatsuindoProvider : MainAPI() {
         TvType.Movie
     )
 
-    // ==========================================
-    // 1. DAFTAR TAB BARIS 
-    // (Pastikan URL di webnya memang tanpa kata 'category/', 
-    // jika ternyata pakai, ubah jadi "category/kamen-rider/")
-    // ==========================================
     override val mainPage = mainPageOf(
         "" to "Latest Update", 
         "kamen-rider/" to "Kamen Rider",
@@ -32,9 +29,6 @@ class TokusatsuindoProvider : MainAPI() {
         "movie/" to "Movie & Special"
     )
 
-    // ==========================================
-    // 2. MESIN PENGAMBIL DATA UNTUK SEMUA TAB
-    // ==========================================
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val url = if (page == 1) {
             "$mainUrl/${request.data}"
@@ -57,30 +51,19 @@ class TokusatsuindoProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         val document = app.get(url).document
-
-        // Ambil Judul
         val title = document.selectFirst("h1.entry-title")?.text()?.trim() 
             ?: document.selectFirst("meta[property=og:title]")?.attr("content")?.substringBefore(" -") 
             ?: "Unknown Title"
-
-        // Ambil Poster
         val poster = document.selectFirst("meta[property=og:image]")?.attr("content") 
             ?: document.selectFirst(".content-thumbnail img")?.attr("src")
-
-        // Ambil Sinopsis
         val description = document.selectFirst(".entry-content p")?.text()?.trim()
-
-        // Ambil Kategori/Tags
         val tags = document.select(".gmr-movie-on a").map { it.text().trim() }
-
-        // Cek apakah halaman ini punya list episode (Class lcp_catlist)
         val episodeElements = document.select("ul.lcp_catlist li a")
 
         return if (episodeElements.isNotEmpty()) {
             val episodes = episodeElements.mapNotNull { ep ->
                 val epUrl = ep.attr("href").takeIf { it.isNotBlank() } ?: return@mapNotNull null
                 val epTitle = ep.text().trim()
-                
                 val epNum = Regex("""(?i)episode\s*(\d+(?:\.\d+)?)""").find(epTitle)?.groupValues?.getOrNull(1)?.toFloatOrNull()
                 
                 newEpisode(epUrl) {
@@ -112,21 +95,21 @@ class TokusatsuindoProvider : MainAPI() {
         val document = app.get(data).document
         var linkFound = false
 
-        // 1. CURI KUNCI GEMBOK (Kita tambah 3 cara berbeda biar pasti dapet)
+        // 1. CURI KUNCI GEMBOK POST ID
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
             ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
 
-        // === TRIK RADAR: Nampilin status ID di layar HP ===
+        // === TRIK RADAR DETEKTOR ===
         if (postId == null) {
-            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
-            return true // Paksa return true biar pesannya muncul
+            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", Qualities.Unknown.value, false))
+            return true 
         } else {
-            callback.invoke(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
+            callback.invoke(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", Qualities.Unknown.value, false))
         }
 
-        // 2. TEMBAK PINTU BELAKANG
-        val tabs = listOf("p1", "p2")
+        // 2. TEMBAK AJAX MUVIPRO
+        val tabs = listOf("p1", "p2", "p3")
         for (tab in tabs) {
             runCatching {
                 val response = app.post(
@@ -136,22 +119,23 @@ class TokusatsuindoProvider : MainAPI() {
                         "tab" to tab,
                         "post_id" to postId
                     ),
-                    headers = mapOf("X-Requested-With" to "XMLHttpRequest")
+                    headers = mapOf(
+                        "X-Requested-With" to "XMLHttpRequest",
+                        "Referer" to data
+                    )
                 ).text
 
-                // === TRIK RADAR: Cek balasan server ===
-                if (response.isBlank()) {
-                    callback.invoke(ExtractorLink("RADAR", "Server Nol/Kosong di $tab", "https://google.com", "", 0, false))
+                // === TRIK RADAR: Cek Balasan Server ===
+                if (response.isBlank() || response.trim() == "0") {
+                    callback.invoke(ExtractorLink("RADAR", "Server Kosong di $tab", "https://google.com", "", Qualities.Unknown.value, false))
                 } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback.invoke(ExtractorLink("RADAR", "Iframe DITEMUKAN di $tab!", "https://google.com", "", 0, false))
+                    callback.invoke(ExtractorLink("RADAR", "Iframe DITEMUKAN di $tab!", "https://google.com", "", Qualities.Unknown.value, false))
                 }
 
-                // 3. AMBIL LINK ASLI (Pakai Jsoup murni, lebih tahan banting dari Regex)
-                val iframeSrc = org.jsoup.Jsoup.parse(response).select("iframe").attr("src")
+                // 3. AMBIL LINK IFRAME
+                val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
                 if (iframeSrc.isNotBlank()) {
                     val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
-                    
-                    // Serahkan ke Extractor bawaan Cloudstream
                     loadExtractor(fixedUrl, data, subtitleCallback, callback)
                     linkFound = true
                 }
@@ -165,10 +149,7 @@ class TokusatsuindoProvider : MainAPI() {
         val titleElement = selectFirst(".entry-title a") ?: return null
         val title = titleElement.text().trim()
         val href = titleElement.attr("href").takeIf { it.isNotBlank() } ?: return null
-        
-        val poster = selectFirst("img.wp-post-image")?.let { img ->
-            img.attr("src").takeIf { it.isNotBlank() } 
-        }
+        val poster = selectFirst("img.wp-post-image")?.attr("src")?.takeIf { it.isNotBlank() }
 
         return newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
             this.posterUrl = poster
