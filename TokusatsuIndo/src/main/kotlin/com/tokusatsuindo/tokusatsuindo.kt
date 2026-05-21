@@ -3,10 +3,12 @@ package com.tokusatsuindo
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-class TokusatsuindoProvider : MainAPI() {
+// Nama KTP sudah disamakan: huruf I besar!
+class TokusatsuIndoProvider : MainAPI() {
     override var mainUrl = "https://www.tokusatsuindo.com"
     override var name = "Tokusatsu Indo🏍"
     override var lang = "id"
@@ -36,11 +38,10 @@ class TokusatsuindoProvider : MainAPI() {
         }
         
         val document = app.get(url).document
-        
         val items = document.select("article.item").mapNotNull { it.toSearchResult() }
         val hasNext = document.select(".next.page-numbers").isNotEmpty() || items.isNotEmpty()
         
-        return newHomePageResponse(request.name, items, hasNext = hasNext)
+        return newHomePageResponse(request.name, items, hasNext)
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
@@ -94,7 +95,7 @@ class TokusatsuindoProvider : MainAPI() {
         val document = app.get(data).document
         var linkFound = false
 
-        // 1. CURI KUNCI GEMBOK (Fix Null Safety - Pakai ?: "" biar gak rewel)
+        // 1. CURI KUNCI GEMBOK
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
             ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
@@ -102,10 +103,10 @@ class TokusatsuindoProvider : MainAPI() {
 
         // === TRIK RADAR DETEKTOR ===
         if (postId.isEmpty()) {
-            callback(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
+            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", Qualities.Unknown.value, false))
             return true 
         } else {
-            callback(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
+            callback.invoke(ExtractorLink("RADAR", "POST ID: $postId", "https://google.com", "", Qualities.Unknown.value, false))
         }
 
         // 2. TEMBAK AJAX MUVIPRO
@@ -117,7 +118,7 @@ class TokusatsuindoProvider : MainAPI() {
                     data = mapOf(
                         "action" to "muvipro_player_content",
                         "tab" to tab,
-                        "post_id" to postId // <--- Udah aman 100%
+                        "post_id" to postId
                     ),
                     headers = mapOf(
                         "X-Requested-With" to "XMLHttpRequest",
@@ -125,11 +126,11 @@ class TokusatsuindoProvider : MainAPI() {
                     )
                 ).text
 
-                // === TRIK RADAR: Cek Balasan Server ===
+                // === TRIK RADAR: Cek Balasan ===
                 if (response.isBlank() || response.trim() == "0") {
-                    callback(ExtractorLink("RADAR", "Server Kosong di $tab", "https://google.com", "", 0, false))
+                    callback.invoke(ExtractorLink("RADAR", "Kosong di $tab", "https://google.com", "", Qualities.Unknown.value, false))
                 } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback(ExtractorLink("RADAR", "Iframe DITEMUKAN di $tab!", "https://google.com", "", 0, false))
+                    callback.invoke(ExtractorLink("RADAR", "Iframe ADA ($tab)!", "https://google.com", "", Qualities.Unknown.value, false))
                 }
 
                 // 3. AMBIL LINK IFRAME
