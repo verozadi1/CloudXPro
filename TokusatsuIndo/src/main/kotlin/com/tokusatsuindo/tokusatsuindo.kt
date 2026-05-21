@@ -112,58 +112,49 @@ class TokusatsuindoProvider : MainAPI() {
         val document = app.get(data).document
         var linkFound = false
 
-        // 1. Curi Kunci Gembok (post_id) dari halaman
+        // 1. CURI KUNCI GEMBOK (Kita tambah 3 cara berbeda biar pasti dapet)
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
+            ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
 
-        if (postId != null) {
-            // 2. Tembak pintu belakang (admin-ajax) untuk Server 1, Server 2, dan Server 3
-            // Kita loop (ulang) dari p1 sampai p3 biar dapet semua opsi video
-            val tabs = listOf("p1", "p2", "p3")
-            
-            for (tab in tabs) {
-                runCatching {
-                    // Masukkan data PERSIS seperti temuan lu bro!
-                    val response = app.post(
-                        url = "$mainUrl/wp-admin/admin-ajax.php",
-                        data = mapOf(
-                            "action" to "muvipro_player_content",
-                            "tab" to tab,
-                            "post_id" to postId
-                        ),
-                        headers = mapOf(
-                            "X-Requested-With" to "XMLHttpRequest",
-                            "Referer" to data
-                        )
-                    ).text
-
-                    // 3. Sapu link GDPlayer / Google Drive dari balasan server
-                    val regex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"'\\]+)""")
-                    regex.findAll(response).forEach { match ->
-                        var url = match.groupValues[1]
-                        if (url.startsWith("//")) url = "https:$url"
-                        
-                        runCatching {
-                            loadExtractor(url, data, subtitleCallback, callback)
-                            linkFound = true
-                        }
-                    }
-                }
-            }
+        // === TRIK RADAR: Nampilin status ID di layar HP ===
+        if (postId == null) {
+            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
+            return true // Paksa return true biar pesannya muncul
+        } else {
+            callback.invoke(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
         }
 
-        // ==========================================
-        // PLAN B: Jaga-jaga kalau ada episode lama yang nggak pakai AJAX
-        // ==========================================
-        val htmlText = document.html()
-        val backupRegex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"']+)""")
-        backupRegex.findAll(htmlText).forEach { match ->
-            var url = match.groupValues[1]
-            if (url.startsWith("//")) url = "https:$url"
-            
+        // 2. TEMBAK PINTU BELAKANG
+        val tabs = listOf("p1", "p2")
+        for (tab in tabs) {
             runCatching {
-                loadExtractor(url, data, subtitleCallback, callback)
-                linkFound = true
+                val response = app.post(
+                    url = "$mainUrl/wp-admin/admin-ajax.php",
+                    data = mapOf(
+                        "action" to "muvipro_player_content",
+                        "tab" to tab,
+                        "post_id" to postId
+                    ),
+                    headers = mapOf("X-Requested-With" to "XMLHttpRequest")
+                ).text
+
+                // === TRIK RADAR: Cek balasan server ===
+                if (response.isBlank()) {
+                    callback.invoke(ExtractorLink("RADAR", "Server Nol/Kosong di $tab", "https://google.com", "", 0, false))
+                } else if (response.contains("iframe", ignoreCase = true)) {
+                    callback.invoke(ExtractorLink("RADAR", "Iframe DITEMUKAN di $tab!", "https://google.com", "", 0, false))
+                }
+
+                // 3. AMBIL LINK ASLI (Pakai Jsoup murni, lebih tahan banting dari Regex)
+                val iframeSrc = org.jsoup.Jsoup.parse(response).select("iframe").attr("src")
+                if (iframeSrc.isNotBlank()) {
+                    val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
+                    
+                    // Serahkan ke Extractor bawaan Cloudstream
+                    loadExtractor(fixedUrl, data, subtitleCallback, callback)
+                    linkFound = true
+                }
             }
         }
         
