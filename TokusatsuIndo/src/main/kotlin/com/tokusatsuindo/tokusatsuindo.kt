@@ -113,7 +113,7 @@ override suspend fun loadLinks(
             if (src.isNotBlank()) allLinks.add(src)
         }
 
-        // 2. Jurus Regex khusus nangkap link GDPlayer & Google Drive yang tersembunyi
+        // 2. Jurus Regex khusus nangkap link GDPlayer & Google Drive yang tersembunyii
         val regex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"']+)""")
         regex.findAll(htmlText).forEach { match ->
             allLinks.add(match.groupValues[1])
