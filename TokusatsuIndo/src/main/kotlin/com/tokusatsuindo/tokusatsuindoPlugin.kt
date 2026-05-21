@@ -1,13 +1,13 @@
 package com.tokusatsuindo
 
-import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.plugins.Plugin
+import android.content.Context
 
 @CloudstreamPlugin
-class TokusatsuindoPlugin : Plugin() {
+class TokusatsuIndoPlugin: Plugin() {
     override fun load(context: Context) {
-        // Ini yang menghubungkan aplikasi ke file tokusatsuindo.kt lu
-        registerMainAPI(TokusatsuindoProvider())
+        // Nama KTP sudah disamakan: huruf I besar!
+        registerMainAPI(TokusatsuIndoProvider())
     }
 }
