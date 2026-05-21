@@ -110,30 +110,63 @@ class TokusatsuindoProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         val document = app.get(data).document
-        val htmlText = document.html()
         var linkFound = false
 
-        val allLinks = mutableListOf<String>()
+        // 1. Curi Kunci Gembok (post_id) dari halaman
+        val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
+            ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
 
-        document.select("iframe").forEach {
-            val src = it.attr("data-src").takeIf { s -> s.isNotBlank() } ?: it.attr("src")
-            if (src.isNotBlank()) allLinks.add(src)
-        }
-
-        val regex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"']+)""")
-        regex.findAll(htmlText).forEach { match ->
-            allLinks.add(match.groupValues[1])
-        }
-
-        allLinks.distinct().forEach { url ->
-            val fixedUrl = if (url.startsWith("//")) "https:$url" else url
+        if (postId != null) {
+            // 2. Tembak pintu belakang (admin-ajax) untuk Server 1, Server 2, dan Server 3
+            // Kita loop (ulang) dari p1 sampai p3 biar dapet semua opsi video
+            val tabs = listOf("p1", "p2", "p3")
             
-            runCatching {
-                loadExtractor(fixedUrl, data, subtitleCallback, callback)
-                linkFound = true
+            for (tab in tabs) {
+                runCatching {
+                    // Masukkan data PERSIS seperti temuan lu bro!
+                    val response = app.post(
+                        url = "$mainUrl/wp-admin/admin-ajax.php",
+                        data = mapOf(
+                            "action" to "muvipro_player_content",
+                            "tab" to tab,
+                            "post_id" to postId
+                        ),
+                        headers = mapOf(
+                            "X-Requested-With" to "XMLHttpRequest",
+                            "Referer" to data
+                        )
+                    ).text
+
+                    // 3. Sapu link GDPlayer / Google Drive dari balasan server
+                    val regex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"'\\]+)""")
+                    regex.findAll(response).forEach { match ->
+                        var url = match.groupValues[1]
+                        if (url.startsWith("//")) url = "https:$url"
+                        
+                        runCatching {
+                            loadExtractor(url, data, subtitleCallback, callback)
+                            linkFound = true
+                        }
+                    }
+                }
             }
         }
 
+        // ==========================================
+        // PLAN B: Jaga-jaga kalau ada episode lama yang nggak pakai AJAX
+        // ==========================================
+        val htmlText = document.html()
+        val backupRegex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"']+)""")
+        backupRegex.findAll(htmlText).forEach { match ->
+            var url = match.groupValues[1]
+            if (url.startsWith("//")) url = "https:$url"
+            
+            runCatching {
+                loadExtractor(url, data, subtitleCallback, callback)
+                linkFound = true
+            }
+        }
+        
         return linkFound
     }
 
