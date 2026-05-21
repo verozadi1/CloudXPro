@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element
 
 class TokusatsuindoProvider : MainAPI() {
     override var mainUrl = "https://www.tokusatsuindo.com"
-    override var name = "Tokusatsu Indo"
+    override var name = "Tokusatsu Indo🏍"
     override var lang = "id"
     override val hasMainPage = true
     override val hasDownloadSupport = true
@@ -94,28 +94,38 @@ class TokusatsuindoProvider : MainAPI() {
         }
     }
 
-    override suspend fun loadLinks(
+override suspend fun loadLinks(
         data: String,
         isCasting: Boolean,
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         val document = app.get(data).document
-
-        // Cari SEMUA iframe di halaman, cek 'data-src' dulu (jika web pakai lazy-load), baru cek 'src'
-        val iframes = document.select("iframe").mapNotNull {
-            it.attr("data-src").takeIf { src -> src.isNotBlank() }
-                ?: it.attr("src").takeIf { src -> src.isNotBlank() }
-        }
-
+        val htmlText = document.html()
         var linkFound = false
 
-        for (iframe in iframes) {
-            val fixedIframeUrl = if (iframe.startsWith("//")) "https:$iframe" else iframe
+        // Wadah untuk ngumpulin semua link yang ketemu
+        val allLinks = mutableListOf<String>()
+
+        // 1. Ambil dari tag iframe biasa
+        document.select("iframe").forEach {
+            val src = it.attr("data-src").takeIf { s -> s.isNotBlank() } ?: it.attr("src")
+            if (src.isNotBlank()) allLinks.add(src)
+        }
+
+        // 2. Jurus Regex khusus nangkap link GDPlayer & Google Drive yang tersembunyi
+        val regex = Regex("""(https://(?:drive\.google\.com|gdplayer\.[a-z]+)[^"']+)""")
+        regex.findAll(htmlText).forEach { match ->
+            allLinks.add(match.groupValues[1])
+        }
+
+        // Hapus link yang dobel/duplikat, lalu eksekusi satu per satu
+        allLinks.distinct().forEach { url ->
+            val fixedUrl = if (url.startsWith("//")) "https:$url" else url
             
-            // Bypass ke loadExtractor Cloudstream (Ini otomatis ngebaca extractor bawaan untuk Google Drive)
             runCatching {
-                loadExtractor(fixedIframeUrl, data, subtitleCallback, callback)
+                // loadExtractor Cloudstream sudah punya mesin bawaan untuk membongkar gdplayer.to
+                loadExtractor(fixedUrl, data, subtitleCallback, callback)
                 linkFound = true
             }
         }
