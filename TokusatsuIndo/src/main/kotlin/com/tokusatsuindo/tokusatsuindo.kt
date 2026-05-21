@@ -3,7 +3,6 @@ package com.tokusatsuindo
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.loadExtractor
-import com.lagradost.cloudstream3.utils.Qualities
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
@@ -95,17 +94,18 @@ class TokusatsuindoProvider : MainAPI() {
         val document = app.get(data).document
         var linkFound = false
 
-        // 1. CURI KUNCI GEMBOK POST ID
+        // 1. CURI KUNCI GEMBOK (Fix Null Safety - Pakai ?: "" biar gak rewel)
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
             ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
+            ?: ""
 
         // === TRIK RADAR DETEKTOR ===
-        if (postId == null) {
-            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", Qualities.Unknown.value, false))
+        if (postId.isEmpty()) {
+            callback(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
             return true 
         } else {
-            callback.invoke(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", Qualities.Unknown.value, false))
+            callback(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
         }
 
         // 2. TEMBAK AJAX MUVIPRO
@@ -117,7 +117,7 @@ class TokusatsuindoProvider : MainAPI() {
                     data = mapOf(
                         "action" to "muvipro_player_content",
                         "tab" to tab,
-                        "post_id" to postId
+                        "post_id" to postId // <--- Udah aman 100%
                     ),
                     headers = mapOf(
                         "X-Requested-With" to "XMLHttpRequest",
@@ -127,9 +127,9 @@ class TokusatsuindoProvider : MainAPI() {
 
                 // === TRIK RADAR: Cek Balasan Server ===
                 if (response.isBlank() || response.trim() == "0") {
-                    callback.invoke(ExtractorLink("RADAR", "Server Kosong di $tab", "https://google.com", "", Qualities.Unknown.value, false))
+                    callback(ExtractorLink("RADAR", "Server Kosong di $tab", "https://google.com", "", 0, false))
                 } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback.invoke(ExtractorLink("RADAR", "Iframe DITEMUKAN di $tab!", "https://google.com", "", Qualities.Unknown.value, false))
+                    callback(ExtractorLink("RADAR", "Iframe DITEMUKAN di $tab!", "https://google.com", "", 0, false))
                 }
 
                 // 3. AMBIL LINK IFRAME
