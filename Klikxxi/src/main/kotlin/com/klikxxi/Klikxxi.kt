@@ -1,0 +1,797 @@
+package com.klikxxi
+
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
+import android.webkit.CookieManager
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.AcraApplication
+import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
+import com.lagradost.cloudstream3.LoadResponse.Companion.addScore
+import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
+import com.lagradost.cloudstream3.MainAPI
+import com.lagradost.cloudstream3.SearchResponse
+import com.lagradost.cloudstream3.TvType
+import com.lagradost.cloudstream3.mainPageOf
+import com.lagradost.cloudstream3.network.CloudflareKiller
+import com.lagradost.cloudstream3.utils.ExtractorLink
+import com.lagradost.cloudstream3.utils.httpsify
+import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.nicehttp.NiceResponse
+import okhttp3.Interceptor
+import okhttp3.Response
+import org.jsoup.nodes.Element
+import java.net.URI
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+
+
+class Klikxxi : MainAPI() {
+    companion object {
+        var context: android.content.Context? = null
+        @Volatile private var cfCookieHeader: String? = null
+
+        // Opening list pages can be slow due to Cloudflare and heavy HTML.
+        const val LIST_TIMEOUT_SECONDS = 360L
+        const val DEFAULT_TIMEOUT_SECONDS = 240L
+
+        private fun updateCfCookieHeader(cookies: Map<String, String>) {
+            if (cookies.isEmpty()) return
+            val filtered = cookies.filterKeys { it == "cf_clearance" || it == "__cf_bm" }
+            if (filtered.isEmpty()) return
+            cfCookieHeader = filtered.entries.joinToString("; ") { (k, v) -> "$k=$v" }
+        }
+    }
+    override var mainUrl = "https://klikxxi.me"
+    override var name = "Klikxxi🎭"
+    override val hasMainPage = true
+    override var lang = "id"
+
+    override val supportedTypes =
+        setOf(TvType.Movie, TvType.TvSeries, TvType.Anime, TvType.AsianDrama)
+
+    // Use CloudflareKiller here to avoid blocking main-page loads with a WebView flow.
+    private val cloudflareInterceptor by lazy { CloudflareKiller() }
+    private val turnstileInterceptor by lazy { KlikxxiTurnstileInterceptor() }
+    private val defaultHeaders = mapOf(
+        "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "User-Agent" to "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"
+    )
+
+    private fun looksLikeChallenge(html: String?): Boolean {
+        val preview = html?.take(128 * 1024).orEmpty()
+        if (preview.isBlank()) return false
+        val hints = listOf(
+            "cf-challenge",
+            "cf-browser-verification",
+            "challenge-platform",
+            "Performing security verification",
+            "Verifying you are human",
+            "Just a moment",
+            "Attention Required",
+            "/cdn-cgi/challenge-platform/"
+        )
+        return hints.any { preview.contains(it, ignoreCase = true) }
+    }
+
+    private suspend fun request(
+        url: String,
+        ref: String? = null,
+        timeoutSeconds: Long = DEFAULT_TIMEOUT_SECONDS
+    ): NiceResponse {
+        val first = app.get(
+            url,
+            interceptor = cloudflareInterceptor,
+            headers = defaultHeaders,
+            referer = ref,
+            timeout = timeoutSeconds
+        )
+        updateCfCookieHeader(first.cookies)
+        mainUrl = runCatching { getBaseUrl(first.url) }.getOrDefault(mainUrl)
+
+        // If CloudflareKiller still returns a challenge page, retry using WebView Turnstile flow.
+        if (looksLikeChallenge(first.text)) {
+            val second = app.get(
+                url,
+                interceptor = turnstileInterceptor,
+                headers = defaultHeaders,
+                referer = ref,
+                timeout = timeoutSeconds
+            )
+            updateCfCookieHeader(second.cookies)
+            mainUrl = runCatching { getBaseUrl(second.url) }.getOrDefault(mainUrl)
+            return second
+        }
+
+        return first
+    }
+
+    private suspend fun requestPost(
+        url: String,
+        data: Map<String, String>,
+        ref: String? = null,
+        timeoutSeconds: Long = DEFAULT_TIMEOUT_SECONDS
+    ): NiceResponse {
+        val first = app.post(
+            url,
+            interceptor = cloudflareInterceptor,
+            headers = defaultHeaders,
+            referer = ref,
+            data = data,
+            timeout = timeoutSeconds
+        )
+        updateCfCookieHeader(first.cookies)
+        mainUrl = runCatching { getBaseUrl(first.url) }.getOrDefault(mainUrl)
+
+        if (looksLikeChallenge(first.text)) {
+            val second = app.post(
+                url,
+                interceptor = turnstileInterceptor,
+                headers = defaultHeaders,
+                referer = ref,
+                data = data,
+                timeout = timeoutSeconds
+            )
+            updateCfCookieHeader(second.cookies)
+            mainUrl = runCatching { getBaseUrl(second.url) }.getOrDefault(mainUrl)
+            return second
+        }
+
+        return first
+    }
+    
+
+    /** Main page: Film Terbaru & Series Terbaru */
+    override val mainPage = mainPageOf(
+        "?s=&search=advanced&post_type=movie&index=&orderby=&genre=&movieyear=&country=&quality=&paged=%d" to "Film Terbaru",
+        "tv/page/%d/" to "Series Terbaru",
+        "category/western-series/page/%d/" to "Western Series",
+        "category/india-series/page/%d/" to "Indian Series",  
+    )
+
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+    val requestData = when {
+        request.data.contains("%d") -> request.data.format(page)
+        else -> request.data
+    }
+
+    val url = if (page == 1 && request.data.contains("page/%d/")) {
+        // Untuk kategori path-style, page pertama cukup pakai base path tanpa suffix page.
+        "$mainUrl/${request.data.replace("page/%d/", "")}"
+    } else {
+        "$mainUrl/$requestData"
+    }.replace("//", "/")
+     .replace(":/", "://")
+
+    val document = request(url, timeoutSeconds = LIST_TIMEOUT_SECONDS).document
+
+    val primary = document.select(
+        "article.has-post-thumbnail, article.item, article.item-infinite, div.latestMovie article, div.latestSeri article"
+    )
+    var items = primary.mapNotNull { it.toSearchResult() }
+
+    if (items.isEmpty()) {
+        val fallback = document.select(
+            "div.items article, div#archive-content article, div.items div.item, div.items .item, " +
+                "article, div.item, li.item, div.movie-item"
+        )
+        items = (fallback.mapNotNull { it.toSearchResult() } + fallback.mapNotNull { it.toSearchResultFallback() })
+            .distinctBy { it.url }
+    }
+
+    return newHomePageResponse(request.name, items)
+}
+
+
+    /* =======================
+       Search & List Handling
+       ======================= */
+
+    private fun Element.toSearchResult(): SearchResponse? {
+        val linkElement = selectFirst(
+            "h2.entry-title > a, h3.entry-title > a, h2 > a, h3 > a, a[rel=bookmark], a[href][title], a[href]"
+        ) ?: return null
+
+        val href = fixUrl(linkElement.attr("href").ifBlank {
+            selectFirst("a")?.attr("href") ?: return null
+        })
+
+        val rawTitle = listOfNotNull(
+            selectFirst("h2.entry-title")?.text(),
+            selectFirst("h3.entry-title")?.text(),
+            selectFirst("h2")?.text(),
+            selectFirst("h3")?.text(),
+            linkElement.attr("title").takeIf { it.isNotBlank() },
+            selectFirst("img[alt]")?.attr("alt")?.takeIf { it.isNotBlank() },
+            selectFirst("img[title]")?.attr("title")?.takeIf { it.isNotBlank() },
+            select("a[href]")
+                .map { it.text().trim() }
+                .filter {
+                    it.isNotBlank() &&
+                        !it.equals("Watch Movie", true) &&
+                        !it.equals("Trailer", true) &&
+                        !it.equals("Next", true) &&
+                        !it.equals("Previous", true)
+                }
+                .maxByOrNull { it.length }
+        ).firstOrNull { !it.isNullOrBlank() }.orEmpty()
+
+        val title = rawTitle
+            .removePrefix("Permalink to: ")
+            .ifBlank { linkElement.text() }
+            .trim()
+
+        if (title.isBlank()) return null
+
+        // Poster – support src, srcset, data-lazy-src, dll + ambil resolusi terbesar
+        val posterElement = this.selectFirst(
+            "a[href] img.wp-post-image, a[href] img.attachment-large, a[href] img[data-lazy-src], " +
+                "a[href] img[data-src], .gmr-box-content img, .thumbnail img, img.wp-post-image, " +
+                "img.attachment-large, img"
+        )
+        val posterUrl = posterElement?.fixPoster()?.let { fixUrl(it) }
+        val posterHeaders = posterUrl?.let(::posterHeaders)
+
+        val quality = this.selectFirst(".gmr-quality-item")?.let { el ->
+    // 1. Check if text directly available: <div class="gmr-quality-item">HD</div>
+        val directText = el.text().trim()
+        if (directText.isNotEmpty()) {
+        directText
+        } else {
+        // 2. Inside <a> : <a>HDTS2</a>
+        val aText = el.selectFirst("a")?.text()?.trim()
+        if (!aText.isNullOrBlank()) {
+            aText
+        } else {
+            // 3. Fallback from class: hd, sd, hdrip, hdts2, etc.
+            el.classNames().firstOrNull { cls ->
+                cls.matches(
+                    Regex(
+                        "hd|sd|cam|ts|hdts|hdts2|hdrip|webrip|bluray|brrip|fhd|uhd|4k",
+                        RegexOption.IGNORE_CASE
+                    )
+                )
+            }?.uppercase()
+        }
+    }
+}
+
+        val typeText = listOfNotNull(
+            selectFirst(".gmr-posttype-item")?.text()?.trim(),
+            selectFirst(".gmr-numbeps, .mli-eps")?.text()?.trim(),
+            text().takeIf { it.contains("TV Show", true) || it.contains("Eps", true) || it.contains("Episode", true) }
+        ).joinToString(" ")
+        val ratingText = this.selectFirst("div.gmr-rating-item")?.ownText()?.trim()
+        val isSeries = typeText.equals("TV Show", ignoreCase = true) ||
+            typeText.contains("Eps", true) ||
+            typeText.contains("Episode", true) ||
+            href.contains("/tv/", true)
+
+        return if (isSeries) {
+            newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
+                this.posterUrl = posterUrl
+                this.posterHeaders = posterHeaders
+            }
+        } else {
+            newMovieSearchResponse(title, href, TvType.Movie) {
+                this.posterUrl = posterUrl
+                this.posterHeaders = posterHeaders
+                if (!quality.isNullOrBlank()) addQuality(quality)
+                this.score = Score.from10(ratingText?.toDoubleOrNull())
+            }
+        }
+    }
+
+    private fun Element.toSearchResultFallback(): SearchResponse? {
+        val anchor = selectFirst("a[href]") ?: return null
+        val hrefRaw = anchor.attr("href").trim()
+        if (hrefRaw.isBlank() || hrefRaw.startsWith("#")) return null
+        val href = fixUrl(hrefRaw)
+
+        val title = listOfNotNull(
+            anchor.attr("title").takeIf { it.isNotBlank() },
+            anchor.attr("aria-label").takeIf { it.isNotBlank() },
+            selectFirst("img[alt]")?.attr("alt")?.trim()?.takeIf { it.isNotBlank() },
+            selectFirst("img[title]")?.attr("title")?.trim()?.takeIf { it.isNotBlank() }
+        ).firstOrNull()?.trim().orEmpty()
+        if (title.isBlank()) return null
+
+        val posterElement = selectFirst("img") ?: return null
+        val posterUrl = posterElement.fixPoster()?.let(::fixUrl)
+        val posterHeaders = posterUrl?.let(::posterHeaders)
+
+        return newMovieSearchResponse(title, href, TvType.Movie) {
+            this.posterUrl = posterUrl
+            this.posterHeaders = posterHeaders
+        }
+    }
+
+    override suspend fun search(query: String): List<SearchResponse> {
+        val document = request("$mainUrl/?s=$query", timeoutSeconds = LIST_TIMEOUT_SECONDS).document
+        return document.select("article.item, article.has-post-thumbnail, article.item-infinite")
+            .mapNotNull { it.toSearchResult() }
+    }
+
+    /** Kadang rekomendasi punya struktur HTML beda */
+    private fun Element.toRecommendResult(): SearchResponse? {
+        val title = this.selectFirst("h2.entry-title > a")?.text()?.trim() ?: return null
+        val href = this.selectFirst("a")!!.attr("href")
+        val posterElement = this.selectFirst(
+            "a[href] img.wp-post-image, a[href] img.attachment-large, a[href] img[data-lazy-src], " +
+                "a[href] img[data-src], .gmr-box-content img, .thumbnail img, img.wp-post-image, " +
+                "img.attachment-large, img"
+        )
+        val posterUrl = posterElement?.fixPoster()?.let { fixUrl(it) }
+        val posterHeaders = posterUrl?.let(::posterHeaders)
+        return newMovieSearchResponse(title, href, TvType.Movie) {
+            this.posterUrl = posterUrl
+            this.posterHeaders = posterHeaders
+        }
+    }
+
+
+    /* =======================
+       Load Detail Page
+       ======================= */
+
+    override suspend fun load(url: String): LoadResponse {
+        val fetch = request(url, ref = mainUrl)
+        val document = fetch.document
+
+        // Title tanpa Season/Episode/Year
+        val title = document
+            .selectFirst("h1.entry-title, div.mvic-desc h3, h1, .entry-title")
+            ?.text()?.trim()
+            ?.substringBefore("Season")
+            ?.substringBefore("Episode")
+            ?.substringBefore("(")
+            ?.trim()
+            .orEmpty()
+
+        val poster = document
+            .selectFirst("figure.pull-left > img, .mvic-thumb img, .poster img, .gmr-movie-data img, .thumb img, img.wp-post-image")
+            .fixPoster()
+            ?.let { fixUrl(it) }
+            ?: document.selectFirst("meta[property=og:image], meta[name=twitter:image]")?.attr("content")?.let(::fixUrl)
+
+        val description = listOfNotNull(
+            document.selectFirst(
+                "div[itemprop=description] > p, " +
+                    "div.desc p.f-desc, " +
+                    "div.entry-content > p, " +
+                    ".gmr-movie-data .entry-content p, " +
+                    ".synopsis, .excerpt, .entry-content p"
+            )?.text()?.trim(),
+            document.selectFirst("meta[property=og:description]")?.attr("content")?.trim(),
+            document.selectFirst("meta[name=description]")?.attr("content")?.trim()
+        ).firstOrNull { !it.isNullOrBlank() }
+
+        val tags = document.select(
+            "strong:contains(Genre) ~ a, " +
+                ".gmr-moviedata:contains(Genre) a, " +
+                ".genxed a, .genre a"
+        ).eachText().distinct()
+
+        val year = listOfNotNull(
+            document.select("div.gmr-moviedata strong:contains(Year:) > a").text(),
+            document.select("strong:contains(Year) ~ a").text(),
+            Regex("""\b(19|20)\d{2}\b""").find(
+                document.selectFirst("div.gmr-moviedata, .gmr-movie-data, .entry-content")?.text().orEmpty()
+            )?.value
+        ).firstNotNullOfOrNull { it.toIntOrNull() }
+
+        val trailer = document
+            .selectFirst("ul.gmr-player-nav li a.gmr-trailer-popup, a.gmr-trailer-popup, a[href*='youtube'], a[href*='youtu.be']")
+            ?.attr("href")
+
+        val rating = listOfNotNull(
+            document.selectFirst("span[itemprop=ratingValue]")?.text()?.trim(),
+            document.selectFirst(".gmr-rating-item")?.ownText()?.trim(),
+            document.selectFirst(".gmr-rating-item, .rating")?.text()?.trim()
+        ).firstNotNullOfOrNull { text ->
+            Regex("""\d+(\.\d+)?""").find(text)?.value?.toDoubleOrNull()
+        }
+
+        val actors = document
+            .select("div.gmr-moviedata span[itemprop=actors] a, .gmr-movie-data span[itemprop=actors] a, .cast a")
+            .map { it.text() }
+            .takeIf { it.isNotEmpty() }
+
+        val recommendations = document
+    .select("article.item.col-md-20, article.item, article.has-post-thumbnail")
+    .mapNotNull { it.toRecommendResult() }
+
+        /* ===== Ambil Episodes (kalau TV Series) ===== */
+
+        val seasonBlocks = document.select("div.gmr-season-block")
+        val allEpisodes = mutableListOf<Episode>()
+
+        seasonBlocks.forEach { block ->
+            val seasonTitle = block.selectFirst("h3.season-title")?.text()?.trim()
+            val seasonNumber = Regex("(\\d+)")
+                .find(seasonTitle ?: "")
+                ?.groupValues
+                ?.getOrNull(1)
+                ?.toIntOrNull()
+                ?: 1
+
+            val eps = block.select("div.gmr-season-episodes a")
+                .filter { a ->
+                    val t = a.text().lowercase()
+                    !t.contains("view all") && !t.contains("batch")
+                }
+                .mapIndexedNotNull { index, epLink ->
+                    val hrefEp = epLink.attr("href")
+                        .takeIf { it.isNotBlank() }
+                        ?.let { fixUrl(it) }
+                        ?: return@mapIndexedNotNull null
+
+                    val name = epLink.text().trim()
+
+                    val episodeNum = Regex("E(p|ps)?(\\d+)", RegexOption.IGNORE_CASE)
+                        .find(name)
+                        ?.groupValues
+                        ?.getOrNull(2)
+                        ?.toIntOrNull()
+                        ?: (index + 1)
+
+                    newEpisode(hrefEp) {
+                        this.name = name
+                        this.season = seasonNumber
+                        this.episode = episodeNum
+                    }
+                }
+
+            allEpisodes.addAll(eps)
+        }
+
+        val episodes = allEpisodes
+            .sortedWith(compareBy({ it.season }, { it.episode }))
+
+        val tvType = if (episodes.isNotEmpty()) TvType.TvSeries else TvType.Movie
+
+        return if (tvType == TvType.TvSeries) {
+            newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
+                this.posterUrl = poster
+                this.posterHeaders = poster?.let(::posterHeaders)
+                this.plot = description
+                this.tags = tags
+                this.year = year
+                if (rating != null) addScore(rating.toString(), 10)
+                addActors(actors)
+                this.recommendations = recommendations
+            }
+        } else {
+            newMovieLoadResponse(title, url, TvType.Movie, url) {
+                this.posterUrl = poster
+                this.posterHeaders = poster?.let(::posterHeaders)
+                this.plot = description
+                this.tags = tags
+                this.year = year
+                addActors(actors)
+                addTrailer(trailer)
+                if (rating != null) addScore(rating.toString(), 10)
+                this.recommendations = recommendations
+            }
+        }
+    }
+
+    /* =======================
+       Links / Streams
+       ======================= */
+
+    override suspend fun loadLinks(
+        data: String,
+        isCasting: Boolean,
+        subtitleCallback: (SubtitleFile) -> Unit,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        val document = request(data, ref = mainUrl).document
+        val postId = document
+            .selectFirst("div#muvipro_player_content_id")
+            ?.attr("data-id")
+
+        if (postId.isNullOrBlank()) return false
+
+        document.select("div.tab-content-ajax").forEach { tab ->
+            val tabId = tab.attr("id")
+            if (tabId.isNullOrBlank()) return@forEach
+
+            val response = requestPost(
+                "$mainUrl/wp-admin/admin-ajax.php",
+                ref = data,
+                data = mapOf(
+                    "action" to "muvipro_player_content",
+                    "tab" to tabId,
+                    "post_id" to postId
+                )
+            ).document
+
+            val iframe = response.selectFirst("iframe")?.getIframeAttr() ?: return@forEach
+            val link = httpsify(iframe)
+
+            // Some hosts require the actual page url as referer, not just the domain.
+            loadExtractor(link, data, subtitleCallback, callback)
+        }
+
+        return true
+    }
+
+    /* =======================
+       Helper Functions
+       ======================= */
+
+    /** Ambil URL poster terbaik (srcset terbesar, data-lazy-src, dst) */
+    private fun Element?.fixPoster(): String? {
+        if (this == null) return null
+
+        fun isValidPosterCandidate(value: String?): Boolean {
+            if (value.isNullOrBlank()) return false
+            val lower = value.trim().lowercase()
+            return !lower.startsWith("data:") &&
+                !lower.contains("placeholder") &&
+                !lower.contains("transparent") &&
+                !lower.contains("spinner") &&
+                !lower.contains("/logo") &&
+                !lower.contains("avatar") &&
+                !lower.endsWith(".svg") &&
+                !lower.endsWith(".gif")
+        }
+
+        fun normalizeCandidate(value: String?): String? {
+            return value
+                ?.substringBefore(" ")
+                ?.trim()
+                ?.takeIf(::isValidPosterCandidate)
+                ?.fixImageQuality()
+                ?.let(::fixUrl)
+                ?.let(::normalizePosterUrl)
+        }
+
+        fun pickFromSrcset(vararg values: String?): String? {
+            return values
+                .firstNotNullOfOrNull { raw ->
+                    raw?.takeIf { it.isNotBlank() }?.split(",")
+                        ?.mapNotNull { item -> normalizeCandidate(item.substringBeforeLast(" ", item)) }
+                        ?.lastOrNull()
+                }
+        }
+
+        val bestSrcset = pickFromSrcset(
+            attr("abs:data-lazy-srcset"),
+            attr("abs:data-srcset"),
+            attr("abs:srcset"),
+            attr("data-lazy-srcset"),
+            attr("data-srcset"),
+            attr("srcset")
+        )
+        if (!bestSrcset.isNullOrBlank()) return bestSrcset
+
+        return listOf(
+            attr("abs:data-lazy-src"),
+            attr("abs:data-src"),
+            attr("abs:data-original"),
+            attr("abs:data-cfsrc"),
+            attr("abs:data-lazyloaded"),
+            attr("data-lazy-src"),
+            attr("data-src"),
+            attr("data-original"),
+            attr("data-cfsrc"),
+            attr("data-lazyloaded"),
+            attr("abs:src"),
+            attr("src")
+        ).firstNotNullOfOrNull(::normalizeCandidate)
+    }
+
+    /** Ambil src untuk iframe, support data-litespeed-src */
+    private fun Element?.getIframeAttr(): String? {
+        return this?.attr("data-litespeed-src").takeIf { !it.isNullOrEmpty() }
+            ?: this?.attr("src")
+    }
+
+    /** Hapus pattern -WIDTHxHEIGHT sebelum ekstensi */
+    private fun String?.fixImageQuality(): String {
+        if (this == null) return ""
+        val regex = Regex("-\\d+x\\d+(?=\\.(webp|jpg|jpeg|png))", RegexOption.IGNORE_CASE)
+        return this.replace(regex, "")
+    }
+
+    private fun posterHeaders(url: String): Map<String, String> {
+        val userAgent = defaultHeaders["User-Agent"].orEmpty()
+        val posterHost = runCatching { URI(url).host }.getOrDefault("")
+        val mainHost = runCatching { URI(mainUrl).host }.getOrDefault("")
+        val sameHost = posterHost.equals(mainHost, ignoreCase = true)
+        return buildMap {
+            put("Referer", mainUrl)
+            if (userAgent.isNotBlank()) put("User-Agent", userAgent)
+            if (sameHost) {
+                cfCookieHeader?.takeIf { it.isNotBlank() }?.let { put("Cookie", it) }
+            }
+        }
+    }
+
+    private fun normalizePosterUrl(url: String): String {
+        return url.replace("&amp;", "&").trim()
+    }
+
+    /** Base URL dari sebuah URL (scheme + host) */
+    private fun getBaseUrl(url: String): String {
+        return URI(url).let { "${it.scheme}://${it.host}" }
+    }
+}
+
+class KlikxxiTurnstileInterceptor(
+    private val targetCookies: List<String> = listOf("cf_clearance", "__cf_bm")
+) : Interceptor {
+    companion object {
+        private const val POLL_INTERVAL_MS = 500L
+        private const val MAX_ATTEMPTS = 60
+        private const val PAGE_WAIT_SECONDS = 30L
+        private val clearanceCache = ConcurrentHashMap<String, Long>()
+    }
+
+    private fun getCookieHeader(url: String, domainUrl: String): String {
+        val manager = CookieManager.getInstance()
+        return manager.getCookie(url) ?: manager.getCookie(domainUrl) ?: ""
+    }
+
+    private fun getCookieValue(url: String, domainUrl: String): String? {
+        val raw = getCookieHeader(url, domainUrl)
+        if (raw.isBlank()) return null
+        return raw.split(";")
+            .map { it.trim() }
+            .firstNotNullOfOrNull { cookie ->
+                targetCookies.firstOrNull { target -> cookie.startsWith("$target=") }
+                    ?.let { cookie.substringAfter("=") }
+                    ?.takeIf { it.isNotBlank() }
+            }
+    }
+
+    private fun invalidateCookie(domainUrl: String) {
+        CookieManager.getInstance().apply {
+            targetCookies.forEach { cookie ->
+                setCookie(domainUrl, "$cookie=; Max-Age=0")
+            }
+            flush()
+        }
+    }
+
+    private fun hasChallenge(response: Response): Boolean {
+        if (response.code == 403 || response.code == 429 || response.code == 503) return true
+
+        val contentType = response.header("Content-Type").orEmpty()
+        if (!contentType.contains("text/html", ignoreCase = true)) return false
+
+        val preview = runCatching { response.peekBody(128 * 1024).string() }.getOrDefault("")
+        if (preview.isBlank()) return false
+
+        val challengeHints = listOf(
+            "cf-challenge",
+            "cf-browser-verification",
+            "cf_clearance",
+            "challenge-platform",
+            "Performing security verification",
+            "Verifying you are human",
+            "Just a moment",
+            "Attention Required",
+            "/cdn-cgi/challenge-platform/"
+        )
+        return challengeHints.any { preview.contains(it, ignoreCase = true) }
+    }
+
+    private fun hasFreshClearance(url: String, domainUrl: String): Boolean {
+        val hasCookie = getCookieValue(url, domainUrl) != null
+        if (!hasCookie) {
+            clearanceCache.remove(domainUrl)
+            return false
+        }
+        val lastSolved = clearanceCache[domainUrl] ?: return true
+        return System.currentTimeMillis() - lastSolved < TimeUnit.MINUTES.toMillis(20)
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val originalRequest = chain.request()
+        val url = originalRequest.url.toString()
+        val domainUrl = "${originalRequest.url.scheme}://${originalRequest.url.host}"
+        val cookieManager = CookieManager.getInstance()
+        if (hasFreshClearance(url, domainUrl)) {
+            val response = chain.proceed(
+                originalRequest.newBuilder()
+                    .header("Cookie", getCookieHeader(url, domainUrl))
+                    .build()
+            )
+            if (!hasChallenge(response)) {
+                clearanceCache[domainUrl] = System.currentTimeMillis()
+                return response
+            }
+            response.close()
+            invalidateCookie(domainUrl)
+            clearanceCache.remove(domainUrl)
+        }
+
+        val context = AcraApplication.context
+            ?: return chain.proceed(originalRequest)
+
+        val handler = Handler(Looper.getMainLooper())
+        var webView: WebView? = null
+        var resolvedUserAgent = originalRequest.header("User-Agent") ?: ""
+        val challengeLatch = CountDownLatch(1)
+
+        handler.post {
+            try {
+                val wv = WebView(context).also { webView = it }
+                CookieManager.getInstance().setAcceptCookie(true)
+                CookieManager.getInstance().setAcceptThirdPartyCookies(wv, true)
+                wv.settings.apply {
+                    javaScriptEnabled = true
+                    domStorageEnabled = true
+                    databaseEnabled = true
+                    javaScriptCanOpenWindowsAutomatically = true
+                    loadsImagesAutomatically = true
+                    if (resolvedUserAgent.isNotBlank()) userAgentString = resolvedUserAgent
+                    resolvedUserAgent = userAgentString
+                }
+                wv.webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView, finishedUrl: String) {
+                        super.onPageFinished(view, finishedUrl)
+                        cookieManager.flush()
+                        if (getCookieValue(finishedUrl, domainUrl) != null) {
+                            clearanceCache[domainUrl] = System.currentTimeMillis()
+                            challengeLatch.countDown()
+                        }
+                    }
+                }
+                wv.loadUrl(url)
+            } catch (e: Exception) {
+                challengeLatch.countDown()
+                e.printStackTrace()
+            }
+        }
+
+        challengeLatch.await(PAGE_WAIT_SECONDS, TimeUnit.SECONDS)
+
+        var attempts = 0
+        while (attempts < MAX_ATTEMPTS && getCookieValue(url, domainUrl) == null) {
+            Thread.sleep(POLL_INTERVAL_MS)
+            cookieManager.flush()
+            attempts++
+        }
+
+        if (getCookieValue(url, domainUrl) != null) {
+            clearanceCache[domainUrl] = System.currentTimeMillis()
+        }
+
+        handler.post {
+            try {
+                webView?.apply {
+                    stopLoading()
+                    clearCache(false)
+                    destroy()
+                }
+                webView = null
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        val finalCookies = getCookieHeader(url, domainUrl)
+        val finalResponse = chain.proceed(
+            originalRequest.newBuilder()
+                .header("Cookie", finalCookies)
+                .apply { if (resolvedUserAgent.isNotBlank()) header("User-Agent", resolvedUserAgent) }
+                .build()
+        )
+
+        if (!hasChallenge(finalResponse)) {
+            clearanceCache[domainUrl] = System.currentTimeMillis()
+            return finalResponse
+        }
+
+        clearanceCache.remove(domainUrl)
+        return finalResponse
+    }
+}
