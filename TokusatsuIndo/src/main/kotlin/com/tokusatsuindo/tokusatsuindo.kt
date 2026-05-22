@@ -96,31 +96,9 @@ class TokusatsuIndoProvider : MainAPI() {
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
             ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
-            ?: ""
+            ?: return false
 
-        // === TRIK RADAR DETEKTOR (Format Baru Cloudstream) ===
-        if (postId.isEmpty()) {
-            callback.invoke(
-                newExtractorLink(
-                    source = "RADAR", 
-                    name = "GAGAL DAPAT POST ID!", 
-                    url = "https://google.com", 
-                    type = ExtractorLinkType.VIDEO
-                ) { quality = Qualities.Unknown.value }
-            )
-            return true 
-        } else {
-            callback.invoke(
-                newExtractorLink(
-                    source = "RADAR", 
-                    name = "POST ID KETEMU: $postId", 
-                    url = "https://google.com", 
-                    type = ExtractorLinkType.VIDEO
-                ) { quality = Qualities.Unknown.value }
-            )
-        }
-
-        // 2. TEMBAK AJAX MUVIPRO
+        // 2. TEMBAK AJAX MUVIPRO (Server 1, 2, 3)
         val tabs = listOf("p1", "p2", "p3")
         for (tab in tabs) {
             runCatching {
@@ -137,31 +115,12 @@ class TokusatsuIndoProvider : MainAPI() {
                     )
                 ).text
 
-                // === TRIK RADAR: Cek Balasan ===
-                if (response.isBlank() || response.trim() == "0") {
-                    callback.invoke(
-                        newExtractorLink(
-                            source = "RADAR", 
-                            name = "Kosong di $tab", 
-                            url = "https://google.com", 
-                            type = ExtractorLinkType.VIDEO
-                        ) { quality = Qualities.Unknown.value }
-                    )
-                } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback.invoke(
-                        newExtractorLink(
-                            source = "RADAR", 
-                            name = "Iframe ADA di $tab!", 
-                            url = "https://google.com", 
-                            type = ExtractorLinkType.VIDEO
-                        ) { quality = Qualities.Unknown.value }
-                    )
-                }
-
-                // 3. AMBIL LINK IFRAME
+                // 3. AMBIL LINK IFRAME ASLI & KIRIM KE MESIN EXTRACTOR CLOUDSTREAM
                 val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
                 if (iframeSrc.isNotBlank()) {
                     val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
+                    
+                    // Ini mesin ajaib bawaan Cloudstream buat mbongkar GDrive, GDPlayer, dll.
                     loadExtractor(fixedUrl, data, subtitleCallback, callback)
                     linkFound = true
                 }
