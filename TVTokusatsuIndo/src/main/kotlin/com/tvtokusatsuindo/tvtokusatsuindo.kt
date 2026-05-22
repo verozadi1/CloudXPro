@@ -16,8 +16,7 @@ class TvTokusatsuIndoProvider : MainAPI() {
     override val supportedTypes = setOf(
         TvType.TvSeries,
         TvType.Movie,
-        TvType.LiveAction,
-        TvType.AsianDrama
+        TvType.AsianDrama // LiveAction dihapus karena web tokusatsu cukup di-cover oleh TvSeries/AsianDrama
     )
 
     // Karena ini web Blogger, kita ambil halaman depannya langsung
