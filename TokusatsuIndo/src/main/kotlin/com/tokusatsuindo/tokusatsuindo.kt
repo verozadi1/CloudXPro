@@ -98,12 +98,26 @@ class TokusatsuIndoProvider : MainAPI() {
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
             ?: ""
 
-        // === TRIK RADAR DETEKTOR (Fix newExtractorLink) ===
+        // === TRIK RADAR DETEKTOR (Format Baru Cloudstream) ===
         if (postId.isEmpty()) {
-            callback.invoke(newExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
+            callback.invoke(
+                newExtractorLink(
+                    source = "RADAR", 
+                    name = "GAGAL DAPAT POST ID!", 
+                    url = "https://google.com", 
+                    type = ExtractorLinkType.VIDEO
+                ) { quality = Qualities.Unknown.value }
+            )
             return true 
         } else {
-            callback.invoke(newExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
+            callback.invoke(
+                newExtractorLink(
+                    source = "RADAR", 
+                    name = "POST ID KETEMU: $postId", 
+                    url = "https://google.com", 
+                    type = ExtractorLinkType.VIDEO
+                ) { quality = Qualities.Unknown.value }
+            )
         }
 
         // 2. TEMBAK AJAX MUVIPRO
@@ -125,9 +139,23 @@ class TokusatsuIndoProvider : MainAPI() {
 
                 // === TRIK RADAR: Cek Balasan ===
                 if (response.isBlank() || response.trim() == "0") {
-                    callback.invoke(newExtractorLink("RADAR", "Kosong di $tab", "https://google.com", "", 0, false))
+                    callback.invoke(
+                        newExtractorLink(
+                            source = "RADAR", 
+                            name = "Kosong di $tab", 
+                            url = "https://google.com", 
+                            type = ExtractorLinkType.VIDEO
+                        ) { quality = Qualities.Unknown.value }
+                    )
                 } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback.invoke(newExtractorLink("RADAR", "Iframe ADA di $tab!", "https://google.com", "", 0, false))
+                    callback.invoke(
+                        newExtractorLink(
+                            source = "RADAR", 
+                            name = "Iframe ADA di $tab!", 
+                            url = "https://google.com", 
+                            type = ExtractorLinkType.VIDEO
+                        ) { quality = Qualities.Unknown.value }
+                    )
                 }
 
                 // 3. AMBIL LINK IFRAME
