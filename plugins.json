@@ -1360,6 +1360,28 @@
         "name": "TokusatsuIndo"
     },
     {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tvtokusatsuindo.com/&size=%size%",
+        "fileHash": "sha256-c7af7713613172ccdf544cebaa8021f8e2ff858df21e064b6d1e91338b8e5b66",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 12880,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "verozadi"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "AsianDrama"
+        ],
+        "version": 1,
+        "internalName": "TVTokusatsuIndo",
+        "description": "TV Tokusatsu Indo\ud83e\udd29",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/TVTokusatsuIndo.cs3",
+        "name": "TVTokusatsuIndo"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://winbu.net&size=%size%",
         "fileHash": "sha256-0663a033c92ea031bec14ab557354deeac55d566f9ce9c8638a6f0cdc47ee74b",
         "apiVersion": 1,
