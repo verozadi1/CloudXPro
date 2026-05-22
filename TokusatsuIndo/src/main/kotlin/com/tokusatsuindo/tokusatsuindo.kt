@@ -1,8 +1,7 @@
 package com.tokusatsuindo
 
 import com.lagradost.cloudstream3.*
-import com.lagradost.cloudstream3.utils.ExtractorLink
-import com.lagradost.cloudstream3.utils.loadExtractor
+import com.lagradost.cloudstream3.utils.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
@@ -99,12 +98,12 @@ class TokusatsuIndoProvider : MainAPI() {
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
             ?: ""
 
-        // === TRIK RADAR DETEKTOR ===
+        // === TRIK RADAR DETEKTOR (Fix newExtractorLink) ===
         if (postId.isEmpty()) {
-            callback.invoke(ExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
+            callback.invoke(newExtractorLink("RADAR", "GAGAL DAPAT POST ID!", "https://google.com", "", 0, false))
             return true 
         } else {
-            callback.invoke(ExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
+            callback.invoke(newExtractorLink("RADAR", "POST ID KETEMU: $postId", "https://google.com", "", 0, false))
         }
 
         // 2. TEMBAK AJAX MUVIPRO
@@ -126,9 +125,9 @@ class TokusatsuIndoProvider : MainAPI() {
 
                 // === TRIK RADAR: Cek Balasan ===
                 if (response.isBlank() || response.trim() == "0") {
-                    callback.invoke(ExtractorLink("RADAR", "Kosong di $tab", "https://google.com", "", 0, false))
+                    callback.invoke(newExtractorLink("RADAR", "Kosong di $tab", "https://google.com", "", 0, false))
                 } else if (response.contains("iframe", ignoreCase = true)) {
-                    callback.invoke(ExtractorLink("RADAR", "Iframe ADA di $tab!", "https://google.com", "", 0, false))
+                    callback.invoke(newExtractorLink("RADAR", "Iframe ADA di $tab!", "https://google.com", "", 0, false))
                 }
 
                 // 3. AMBIL LINK IFRAME
