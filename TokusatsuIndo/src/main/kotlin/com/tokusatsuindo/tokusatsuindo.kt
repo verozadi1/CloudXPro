@@ -55,10 +55,11 @@ class TokusatsuIndoProvider : MainAPI() {
         return if (episodeElements.isNotEmpty()) {
             val episodes = episodeElements.mapNotNull { ep ->
                 val epUrl = ep.attr("href").takeIf { it.isNotBlank() } ?: return@mapNotNull null
+                val epUrlFixed = if (epUrl.startsWith("//")) "https:$epUrl" else epUrl
                 val epTitle = ep.text().trim()
                 val epNum = Regex("""(?i)episode\s*(\d+(?:\.\d+)?)""")
                     .find(epTitle)?.groupValues?.getOrNull(1)?.toFloatOrNull()
-                newEpisode(epUrl) {
+                newEpisode(epUrlFixed) {
                     this.name = epTitle
                     this.episode = epNum?.toInt()
                 }
@@ -121,7 +122,19 @@ class TokusatsuIndoProvider : MainAPI() {
                     val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
                     val finalUrl = if (fixedUrl.contains("drive.google.com") && fixedUrl.contains("/preview"))
                         fixedUrl.replace("/preview", "/view") else fixedUrl
-                    loadExtractor(finalUrl, subtitleCallback, callback)
+
+                    if (finalUrl.contains("drive.google.com")) {
+                        // Extract GDrive ID
+                        val gdriveId = Regex("""/d/([^/]+)""").find(finalUrl)?.groupValues?.get(1)
+                            ?: Regex("""id=([^&]+)""").find(finalUrl)?.groupValues?.get(1)
+                        if (gdriveId != null) {
+                            // Load both standard GoogleDrive and gdriveplayer.to proxy extractor
+                            loadExtractor("https://gdriveplayer.to/embed2.php?id=$gdriveId", subtitleCallback, callback)
+                        }
+                        loadExtractor(finalUrl, subtitleCallback, callback)
+                    } else {
+                        loadExtractor(finalUrl, subtitleCallback, callback)
+                    }
                     linkFound = true
                 }
             }
