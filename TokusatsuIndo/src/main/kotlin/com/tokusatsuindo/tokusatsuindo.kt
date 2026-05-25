@@ -28,11 +28,8 @@ class TokusatsuIndoProvider : MainAPI() {
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val url = if (page == 1) {
-            "$mainUrl/${request.data}"
-        } else {
-            "$mainUrl/${request.data}page/$page/"
-        }
+        val url = if (page == 1) "$mainUrl/${request.data}"
+                  else "$mainUrl/${request.data}page/$page/"
         val document = app.get(url).document
         val items = document.select("article.item").mapNotNull { it.toSearchResult() }
         val hasNext = document.select(".next.page-numbers").isNotEmpty() || items.isNotEmpty()
@@ -86,21 +83,19 @@ class TokusatsuIndoProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        val document = app.get(data).document
         var linkFound = false
 
-        // Ambil slug dari URL, lalu cari postId via WordPress REST API
-        val slug = data.trimEnd('/').substringAfterLast('/')
-        val postId = runCatching {
-            val apiResponse = app.get(
-                "$mainUrl/wp-json/wp/v2/posts?slug=$slug",
-                headers = mapOf("Referer" to mainUrl)
-            ).text
-            Regex(""""id"\s*:\s*(\d+)""").find(apiResponse)?.groupValues?.getOrNull(1)
-        }.getOrNull()
+        // Cara original yang terbukti works: ambil dari article id="post-XXXXX"
+        val articleId = document.selectFirst("article")?.attr("id") ?: ""
+        val postId = when {
+            // article id="post-12345" -> "12345"
+            articleId.contains("-") -> articleId.substringAfter("-").takeIf { it.isNotBlank() }
+            // fallback lain
+            else -> document.selectFirst("body")?.classNames()
+                ?.find { it.startsWith("postid-") }?.substringAfter("-")
+        } ?: return false
 
-        if (postId == null) return false
-
-        // AJAX untuk ambil iframe streaming
         for (tab in listOf("p1", "p2")) {
             runCatching {
                 val response = app.post(
