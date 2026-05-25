@@ -1,7 +1,7 @@
 version = 1
 
 cloudstream {
-    description = "Tokusatsu Indo🏍"
+    description = "Tokusatsu Indo"
     language = "id"
     authors = listOf("verozadi")
     status = 1
