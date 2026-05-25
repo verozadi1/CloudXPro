@@ -14,8 +14,8 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -69,10 +69,7 @@ class GdPlayer : ExtractorApi() {
         val apiUrl = apx.replace("-config", "") + "?p=" + ps
 
         // 5. Make POST request to sources API with kaken as raw body
-        val requestBody = RequestBody.create(
-            MediaType.parse("text/plain"),
-            kaken
-        )
+        val requestBody = kaken.toRequestBody("text/plain".toMediaTypeOrNull())
 
         val responseText = app.post(
             apiUrl,
