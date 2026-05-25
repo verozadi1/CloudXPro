@@ -84,60 +84,97 @@ class TokusatsuIndoProvider : MainAPI() {
     }
 
     override suspend fun loadLinks(
-        data: String,
-        isCasting: Boolean,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
-    ): Boolean {
-        val document = app.get(data).document
-        var linkFound = false
+    data: String,
+    isCasting: Boolean,
+    subtitleCallback: (SubtitleFile) -> Unit,
+    callback: (ExtractorLink) -> Unit
+): Boolean {
+    val document = app.get(data).document
+    var linkFound = false
 
-        val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
-            ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
-            ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
-            ?: return false
+    val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=")
+        ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
+        ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
+        ?: return false
 
-        val tabs = listOf("p1", "p2", "p3")
-        for (tab in tabs) {
-            runCatching {
-                val response = app.post(
-                    url = "$mainUrl/wp-admin/admin-ajax.php",
-                    data = mapOf(
-                        "action" to "muvipro_player_content",
-                        "tab" to tab,
-                        "post_id" to postId
-                    ),
-                    headers = mapOf(
-                        "Accept" to "*/*",
-                        "X-Requested-With" to "XMLHttpRequest",
-                        "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8",
-                        "Referer" to data
-                    )
-                ).text
+    val tabs = listOf("p1", "p2", "p3")
+    for (tab in tabs) {
+        runCatching {
+            val response = app.post(
+                url = "$mainUrl/wp-admin/admin-ajax.php",
+                data = mapOf(
+                    "action" to "muvipro_player_content",
+                    "tab" to tab,
+                    "post_id" to postId
+                ),
+                headers = mapOf(
+                    "Accept" to "*/*",
+                    "X-Requested-With" to "XMLHttpRequest",
+                    "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8",
+                    "Referer" to data
+                )
+            ).text
 
-                val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
-                if (iframeSrc.isNotBlank()) {
-                    val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
-                    
-                    // KITA JADIKAN LINK MENTAHNYA SEBAGAI NAMA TOMBOL SERVER
-                    callback.invoke(
-                        newExtractorLink(
-                            source = "Muvipro $tab", 
-                            name = fixedUrl, // <--- Link aslinya bakal muncul di sini!
-                            url = fixedUrl, 
-                            type = ExtractorLinkType.VIDEO 
-                        ) {
-                            this.referer = mainUrl
-                            this.quality = Qualities.Unknown.value
+            val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
+            if (iframeSrc.isNotBlank()) {
+                val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
+
+                when {
+                    // ✅ Handle Google Drive /preview -> ubah ke /view biar extractor CloudStream bisa handle
+                    fixedUrl.contains("drive.google.com") -> {
+                        val fileId = Regex("""/file/d/([a-zA-Z0-9_\-]+)""")
+                            .find(fixedUrl)?.groupValues?.getOrNull(1)
+                        if (fileId != null) {
+                            val viewUrl = "https://drive.google.com/file/d/$fileId/view"
+                            loadExtractor(viewUrl, data, subtitleCallback, callback)
+                            linkFound = true
                         }
-                    )
-                    linkFound = true
+                    }
+
+                    // ✅ Handle gdplayer.to -> fetch halaman-nya, cari URL video di dalamnya
+                    fixedUrl.contains("gdplayer.to") || fixedUrl.contains("gdplayer") -> {
+                        val gdHtml = app.get(
+                            fixedUrl,
+                            referer = data,
+                            headers = mapOf("User-Agent" to "Mozilla/5.0")
+                        ).text
+
+                        // Cari URL video (.mp4 atau .m3u8) di dalam source page
+                        val videoUrl = Regex(""""file"\s*:\s*"(https?:[^"]+\.(?:mp4|m3u8)[^"]*)"""")
+                            .find(gdHtml)?.groupValues?.getOrNull(1)?.replace("\\/", "/")
+                            ?: Regex("""sources\s*:\s*\[\s*\{[^}]*"file"\s*:\s*"([^"]+)"""")
+                                .find(gdHtml)?.groupValues?.getOrNull(1)?.replace("\\/", "/")
+                            ?: Jsoup.parse(gdHtml).selectFirst("video source")?.attr("src")
+
+                        if (videoUrl != null) {
+                            val isM3u8 = videoUrl.contains(".m3u8")
+                            callback.invoke(
+                                newExtractorLink(
+                                    source = "GDPlayer",
+                                    name = "GDPlayer",
+                                    url = videoUrl,
+                                    type = if (isM3u8) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
+                                ) {
+                                    this.referer = fixedUrl
+                                    this.quality = Qualities.Unknown.value
+                                }
+                            )
+                            linkFound = true
+                        }
+                    }
+
+                    // ✅ URL lain: coba loadExtractor biasa
+                    else -> {
+                        loadExtractor(fixedUrl, data, subtitleCallback, callback)
+                        linkFound = true
+                    }
                 }
             }
         }
-        
-        return linkFound
     }
+
+    return linkFound
+}
 
     private fun Element.toSearchResult(): SearchResponse? {
         val titleElement = selectFirst(".entry-title a") ?: return null
