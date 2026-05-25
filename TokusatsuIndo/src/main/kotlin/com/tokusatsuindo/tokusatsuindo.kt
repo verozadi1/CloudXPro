@@ -96,14 +96,9 @@ class TokusatsuIndoProvider : MainAPI() {
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
             ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
-            ?: ""
+            ?: return false
 
-        if (postId.isEmpty()) {
-            callback.invoke(newExtractorLink("RADAR", "KUNCI GAGAL DITEMUKAN", "https://google.com", ExtractorLinkType.VIDEO) { quality = Qualities.Unknown.value })
-            return true
-        }
-
-        // 2. TEMBAK AJAX MUVIPRO (Server 1, 2, 3)
+        // 2. TEMBAK AJAX MUVIPRO PAKE PENYAMARAN HEADER
         val tabs = listOf("p1", "p2", "p3")
         for (tab in tabs) {
             runCatching {
@@ -124,25 +119,12 @@ class TokusatsuIndoProvider : MainAPI() {
                     )
                 ).text
 
-                // 3. AMBIL LINK IFRAME ASLI & CEK PAKAI RADAR
+                // 3. AMBIL LINK IFRAME ASLI LALU EKSTRAK
                 val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
-                
                 if (iframeSrc.isNotBlank()) {
                     val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
-                    
-                    // ALAT SADAP: Kalau Iframe berhasil didapat, tampilkan linknya di layar
-                    callback.invoke(
-                        newExtractorLink("RADAR ($tab)", "SUKSES AJAX: $fixedUrl", "https://google.com", ExtractorLinkType.VIDEO) { quality = Qualities.Unknown.value }
-                    )
-                    
                     loadExtractor(fixedUrl, data, subtitleCallback, callback)
                     linkFound = true
-                } else {
-                    // ALAT SADAP: Kalau server nolak/kosong, tampilkan balasan server
-                    val cutRes = if (response.length > 25) response.substring(0, 25) + "..." else response
-                    callback.invoke(
-                        newExtractorLink("RADAR ($tab)", "GAGAL AJAX: $cutRes", "https://google.com", ExtractorLinkType.VIDEO) { quality = Qualities.Unknown.value }
-                    )
                 }
             }
         }
