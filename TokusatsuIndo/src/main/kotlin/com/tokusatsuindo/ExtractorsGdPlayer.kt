@@ -7,13 +7,15 @@ import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
 import com.lagradost.cloudstream3.utils.Qualities
 import com.lagradost.cloudstream3.utils.newExtractorLink
-import com.squareup.duktape.Duktape
+import com.lagradost.cloudstream3.utils.getAndUnpack
 import android.util.Base64
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -40,33 +42,18 @@ class GdPlayer : ExtractorApi() {
         val aaencodedScript = Regex("""(ﾟωﾟ.*?)\s*</script>""").find(html)?.groupValues?.get(1)
             ?: return
 
-        // 1. Decode AAEncoded Javascript
-        val duktape = Duktape.create()
+        // 1. Decode AAEncoded Javascript natively in Kotlin
         val packerScript = try {
-            val evalPreamble = "(\\uFF9F\\u0414\\uFF9F) ['_'] ( (\\uFF9F\\u0414\\uFF9F) ['_'] ("
-            val decodePreamble = "( (\\uFF9F\\u0414\\uFF9F) ['_'] ("
-            val evalPostamble = ") (\\uFF9F\\u0398\\uFF9F)) ('_');"
-            val decodePostamble = ") ());"
-
-            val decodingScript = aaencodedScript
-                .replace(evalPreamble, decodePreamble)
-                .replace(evalPostamble, decodePostamble)
-
-            duktape.evaluate(decodingScript) as String
+            AADecoder.decode(aaencodedScript)
         } catch (e: Exception) {
             return
-        } finally {
-            duktape.close()
         }
 
-        // 2. Unpack Packer Javascript
-        val duktape2 = Duktape.create()
+        // 2. Unpack Packer Javascript using Cloudstream's built-in getAndUnpack
         val unpackedScript = try {
-            duktape2.evaluate(packerScript.replaceFirst("eval", "")) as String
+            getAndUnpack(packerScript)
         } catch (e: Exception) {
             return
-        } finally {
-            duktape2.close()
         }
 
         // 3. Extract variables from unpacked script
@@ -81,10 +68,15 @@ class GdPlayer : ExtractorApi() {
         // https://rack1.bubarindpr.com/api-config/ => Replace "-config" with "" => https://rack1.bubarindpr.com/api/
         val apiUrl = apx.replace("-config", "") + "?p=" + ps
 
-        // 5. Make POST request to sources API with kaken as body
+        // 5. Make POST request to sources API with kaken as raw body
+        val requestBody = RequestBody.create(
+            MediaType.parse("text/plain"),
+            kaken
+        )
+
         val responseText = app.post(
             apiUrl,
-            data = kaken,
+            requestBody = requestBody,
             headers = mapOf(
                 "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                 "Referer" to url,
@@ -116,10 +108,11 @@ class GdPlayer : ExtractorApi() {
                     source = name,
                     name = "$name (${source.label})",
                     url = source.file,
-                    referer = url,
-                    quality = getQualityFromName(source.label),
                     type = if (source.file.contains(".m3u8")) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
-                )
+                ) {
+                    this.referer = url
+                    this.quality = getQualityFromName(source.label)
+                }
             )
         }
     }
@@ -150,6 +143,82 @@ class GdPlayer : ExtractorApi() {
             name.contains("480") -> Qualities.P480.value
             name.contains("360") -> Qualities.P360.value
             else -> Qualities.Unknown.value
+        }
+    }
+
+    object AADecoder {
+        private fun isOctalDigit(c: Char): Boolean {
+            return c in '0'..'7'
+        }
+
+        fun decode(encodedText: String): String {
+            var expr = encodedText.replace("/*´∇｀*/", "")
+
+            val mapping = listOf(
+                "((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))" to "9",
+                "((ﾟｰﾟ) + (ﾟｰﾟ))" to "8",
+                "((ﾟｰﾟ) + (o^_^o))" to "7",
+                "((o^_^o) +(o^_^o))" to "6",
+                "((ﾟｰﾟ) + (ﾟΘﾟ))" to "5",
+                "(ﾟｰﾟ)" to "4",
+                "(o^_^o)" to "3",
+                "((o^_^o) - (ﾟΘﾟ))" to "2",
+                "(ﾟΘﾟ)" to "1",
+                "(c^_^o)" to "0",
+                "c^_^o" to "0",
+                "ﾟｰﾟ" to "4",
+                "o^_^o" to "3",
+                "ﾟΘﾟ" to "1"
+            )
+
+            expr = expr.replace("(ﾟДﾟ)[ﾟεﾟ]", "\\")
+            expr = expr.replace("(ﾟДﾟ)[ﾟoﾟ]", "\"")
+
+            for ((emo, value) in mapping) {
+                expr = expr.replace(emo, value)
+            }
+
+            expr = expr.replace("(3-1)", "2")
+            expr = expr.replace("(3-1-1)", "1")
+            expr = expr.replace("(4-1)", "3")
+
+            expr = expr.replace("+", "")
+                .replace(" ", "")
+                .replace("\n", "")
+                .replace("\r", "")
+
+            val sb = StringBuilder()
+            var i = 0
+            val len = expr.length
+            while (i < len) {
+                if (expr[i] == '\\' && i + 1 < len) {
+                    if (expr[i + 1] == 'x' && i + 3 < len) {
+                        val hex = expr.substring(i + 2, i + 4)
+                        sb.append(hex.toInt(16).toChar())
+                        i += 4
+                    } else if (isOctalDigit(expr[i + 1])) {
+                        var octalLen = 1
+                        while (octalLen < 3 && i + 1 + octalLen < len && isOctalDigit(expr[i + 1 + octalLen])) {
+                            octalLen++
+                        }
+                        val octal = expr.substring(i + 1, i + 1 + octalLen)
+                        sb.append(octal.toInt(8).toChar())
+                        i += 1 + octalLen
+                    } else {
+                        sb.append(expr[i])
+                        i++
+                    }
+                } else {
+                    sb.append(expr[i])
+                    i++
+                }
+            }
+
+            var result = sb.toString()
+            if (result.startsWith("\"") && result.endsWith("\"")) {
+                result = result.substring(1, result.length - 1)
+            }
+            return result
         }
     }
 
