@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element
 
 class TokusatsuIndoProvider : MainAPI() {
     override var mainUrl = "https://www.tokusatsuindo.com"
-    override var name = "Tokusatsu Indo🏍"
+    override var name = "Tokusatsu Indo🤖"
     override var lang = "id"
     override val hasMainPage = true
     override val hasDownloadSupport = true
@@ -19,7 +19,7 @@ class TokusatsuIndoProvider : MainAPI() {
     )
 
     override val mainPage = mainPageOf(
-        "" to "Latest Update", 
+        "" to "Latest Update",
         "kamen-rider/" to "Kamen Rider",
         "super-sentai/" to "Super Sentai",
         "ultraman/" to "Ultraman",
@@ -33,11 +33,11 @@ class TokusatsuIndoProvider : MainAPI() {
         } else {
             "$mainUrl/${request.data}page/$page/"
         }
-        
+
         val document = app.get(url).document
         val items = document.select("article.item").mapNotNull { it.toSearchResult() }
         val hasNext = document.select(".next.page-numbers").isNotEmpty() || items.isNotEmpty()
-        
+
         return newHomePageResponse(request.name, items, hasNext)
     }
 
@@ -48,10 +48,10 @@ class TokusatsuIndoProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         val document = app.get(url).document
-        val title = document.selectFirst("h1.entry-title")?.text()?.trim() 
-            ?: document.selectFirst("meta[property=og:title]")?.attr("content")?.substringBefore(" -") 
+        val title = document.selectFirst("h1.entry-title")?.text()?.trim()
+            ?: document.selectFirst("meta[property=og:title]")?.attr("content")?.substringBefore(" -")
             ?: "Unknown Title"
-        val poster = document.selectFirst("meta[property=og:image]")?.attr("content") 
+        val poster = document.selectFirst("meta[property=og:image]")?.attr("content")
             ?: document.selectFirst(".content-thumbnail img")?.attr("src")
         val description = document.selectFirst(".entry-content p")?.text()?.trim()
         val tags = document.select(".gmr-movie-on a").map { it.text().trim() }
@@ -61,8 +61,9 @@ class TokusatsuIndoProvider : MainAPI() {
             val episodes = episodeElements.mapNotNull { ep ->
                 val epUrl = ep.attr("href").takeIf { it.isNotBlank() } ?: return@mapNotNull null
                 val epTitle = ep.text().trim()
-                val epNum = Regex("""(?i)episode\s*(\d+(?:\.\d+)?)""").find(epTitle)?.groupValues?.getOrNull(1)?.toFloatOrNull()
-                
+                val epNum = Regex("""(?i)episode\s*(\d+(?:\.\d+)?)""")
+                    .find(epTitle)?.groupValues?.getOrNull(1)?.toFloatOrNull()
+
                 newEpisode(epUrl) {
                     this.name = epTitle
                     this.episode = epNum?.toInt()
@@ -89,16 +90,39 @@ class TokusatsuIndoProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        val document = app.get(data).document
+        val html = app.get(
+            data,
+            headers = mapOf(
+                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "Referer" to mainUrl
+            )
+        ).text
+        val document = Jsoup.parse(html)
         var linkFound = false
-    
-        val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=")
-            ?: document.selectFirst("body")?.classNames()
-                ?.find { it.startsWith("postid-") }?.substringAfter("-")
-            ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
-            ?: return false
-    
-        for (tab in listOf("p1", "p2", "p3")) {
+
+        // Cari postId dari berbagai sumber termasuk JS inline
+        val postId =
+            Regex("""[?&]p=(\d+)""").find(
+                document.selectFirst("link[rel=shortlink]")?.attr("href") ?: ""
+            )?.groupValues?.getOrNull(1)
+            ?: Regex("""postid-(\d+)""").find(html)?.groupValues?.getOrNull(1)
+            ?: document.selectFirst("article[id]")?.attr("id")?.filter { it.isDigit() }
+            ?: Regex(""""postId"\s*:\s*"?(\d+)"?""").find(html)?.groupValues?.getOrNull(1)
+            ?: Regex("""post_id\s*[=:]\s*"?(\d+)"?""").find(html)?.groupValues?.getOrNull(1)
+
+        // Fallback: ambil link download langsung dari HTML (tidak butuh AJAX)
+        document.select("a[href*='pndk.to'], a[href*='.mp4'], a[href*='drive.google.com']").forEach { el ->
+            val href = el.attr("href").takeIf { it.isNotBlank() } ?: return@forEach
+            val finalUrl = if (href.contains("drive.google.com") && href.contains("/preview"))
+                href.replace("/preview", "/view") else href
+            loadExtractor(finalUrl, subtitleCallback, callback)
+            linkFound = true
+        }
+
+        if (postId == null) return linkFound
+
+        // AJAX untuk streaming
+        for (tab in listOf("p1", "p2")) {
             runCatching {
                 val response = app.post(
                     url = "$mainUrl/wp-admin/admin-ajax.php",
@@ -111,30 +135,26 @@ class TokusatsuIndoProvider : MainAPI() {
                         "Accept"           to "*/*",
                         "X-Requested-With" to "XMLHttpRequest",
                         "Content-Type"     to "application/x-www-form-urlencoded; charset=UTF-8",
-                        "Referer"          to data
+                        "Referer"          to data,
+                        "Origin"           to mainUrl
                     )
                 ).text
-    
+
+                if (response.isBlank() || response == "0" || response == "false") return@runCatching
+
                 val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
                 if (iframeSrc.isNotBlank()) {
                     val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
-    
-                    // Google Drive: ubah /preview -> /view agar extractor bawaan CloudStream bisa handle
-                    val finalUrl = if (fixedUrl.contains("drive.google.com") && fixedUrl.contains("/preview")) {
-                        fixedUrl.replace("/preview", "/view")
-                    } else {
-                        fixedUrl
-                    }
-    
-                    // Ikutin pola Anichin: 3 parameter saja
+                    val finalUrl = if (fixedUrl.contains("drive.google.com") && fixedUrl.contains("/preview"))
+                        fixedUrl.replace("/preview", "/view") else fixedUrl
                     loadExtractor(finalUrl, subtitleCallback, callback)
                     linkFound = true
                 }
             }
         }
-    
+
         return linkFound
-}
+    }
 
     private fun Element.toSearchResult(): SearchResponse? {
         val titleElement = selectFirst(".entry-title a") ?: return null
