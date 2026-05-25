@@ -98,7 +98,7 @@ class TokusatsuIndoProvider : MainAPI() {
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
             ?: return false
 
-        // 2. TEMBAK AJAX MUVIPRO (Server 1, 2, 3)
+        // 2. TEMBAK AJAX MUVIPRO (Dengan Paspor Penyamaran cURL Asli)
         val tabs = listOf("p1", "p2", "p3")
         for (tab in tabs) {
             runCatching {
@@ -110,8 +110,12 @@ class TokusatsuIndoProvider : MainAPI() {
                         "post_id" to postId
                     ),
                     headers = mapOf(
-                        "X-Requested-With" to "XMLHttpRequest",
-                        "Referer" to data
+                        "Accept" to "*/*",
+                        "Accept-Language" to "id,en-US;q=0.9,en;q=0.8",
+                        "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8",
+                        "Origin" to mainUrl,
+                        "Referer" to data,
+                        "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
                     )
                 ).text
 
