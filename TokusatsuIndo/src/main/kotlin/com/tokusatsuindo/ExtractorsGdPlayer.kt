@@ -149,7 +149,15 @@ class GdPlayer : ExtractorApi() {
         }
 
         fun decode(encodedText: String): String {
-            var expr = encodedText.replace("/*´∇｀*/", "")
+            // Extract only the emoticon string part
+            val startIdx = encodedText.indexOf("/*´∇｀*/(ﾟДﾟ)[ﾟoﾟ]+")
+            val endIdx = encodedText.lastIndexOf("(ﾟДﾟ)[ﾟoﾟ]) (ﾟΘﾟ)) ('_');")
+
+            if (startIdx == -1 || endIdx == -1) {
+                return ""
+            }
+
+            var expr = encodedText.substring(startIdx, endIdx)
 
             val mapping = listOf(
                 "((ﾟｰﾟ) + (ﾟｰﾟ) + (ﾟΘﾟ))" to "9",
@@ -175,14 +183,16 @@ class GdPlayer : ExtractorApi() {
                 expr = expr.replace(emo, value)
             }
 
-            expr = expr.replace("(3-1)", "2")
-            expr = expr.replace("(3-1-1)", "1")
-            expr = expr.replace("(4-1)", "3")
-
+            // Strip spaces and '+' FIRST!
             expr = expr.replace("+", "")
                 .replace(" ", "")
                 .replace("\n", "")
                 .replace("\r", "")
+
+            // Handle mathematical modifications inside octals/hexes AFTER stripping spaces!
+            expr = expr.replace("(3-1)", "2")
+            expr = expr.replace("(3-1-1)", "1")
+            expr = expr.replace("(4-1)", "3")
 
             val sb = StringBuilder()
             var i = 0
@@ -211,11 +221,14 @@ class GdPlayer : ExtractorApi() {
                 }
             }
 
-            var result = sb.toString()
-            if (result.startsWith("\"") && result.endsWith("\"")) {
-                result = result.substring(1, result.length - 1)
+            var result = sb.toString().replace("/*´∇｀*/", "").trim()
+            if (result.startsWith("\"")) {
+                result = result.substring(1)
             }
-            return result
+            if (result.endsWith("\"")) {
+                result = result.substring(0, result.length - 1)
+            }
+            return result.trim()
         }
     }
 
