@@ -9,5 +9,6 @@ class TokusatsuindoPlugin : Plugin() {
     override fun load(context: Context) {
         registerMainAPI(TokusatsuIndoProvider()) // I kapital
         registerExtractorAPI(GdPlayer())
+        registerExtractorAPI(GdrivePlayer())
     }
 }
