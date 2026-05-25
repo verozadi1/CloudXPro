@@ -92,13 +92,11 @@ class TokusatsuIndoProvider : MainAPI() {
         val document = app.get(data).document
         var linkFound = false
 
-        // 1. CURI KUNCI GEMBOK
         val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=") 
             ?: document.selectFirst("body")?.classNames()?.find { it.startsWith("postid-") }?.substringAfter("-")
             ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
             ?: return false
 
-        // 2. TEMBAK AJAX MUVIPRO PAKE PENYAMARAN HEADER
         val tabs = listOf("p1", "p2", "p3")
         for (tab in tabs) {
             runCatching {
@@ -113,17 +111,25 @@ class TokusatsuIndoProvider : MainAPI() {
                         "Accept" to "*/*",
                         "X-Requested-With" to "XMLHttpRequest",
                         "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8",
-                        "Origin" to mainUrl,
-                        "Referer" to data,
-                        "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+                        "Referer" to data
                     )
                 ).text
 
-                // 3. AMBIL LINK IFRAME ASLI LALU EKSTRAK
                 val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
                 if (iframeSrc.isNotBlank()) {
                     val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
-                    loadExtractor(fixedUrl, data, subtitleCallback, callback)
+                    
+                    // KITA JADIKAN LINK MENTAHNYA SEBAGAI NAMA TOMBOL SERVER
+                    callback.invoke(
+                        newExtractorLink(
+                            source = "Muvipro $tab", 
+                            name = fixedUrl, // <--- Link aslinya bakal muncul di sini!
+                            url = fixedUrl, 
+                            referer = mainUrl,
+                            quality = Qualities.Unknown.value,
+                            type = ExtractorLinkType.VIDEO 
+                        )
+                    )
                     linkFound = true
                 }
             }
