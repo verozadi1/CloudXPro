@@ -84,56 +84,56 @@ class TokusatsuIndoProvider : MainAPI() {
     }
 
     override suspend fun loadLinks(
-    data: String,
-    isCasting: Boolean,
-    subtitleCallback: (SubtitleFile) -> Unit,
-    callback: (ExtractorLink) -> Unit
-): Boolean {
-    val document = app.get(data).document
-    var linkFound = false
-
-    val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=")
-        ?: document.selectFirst("body")?.classNames()
-            ?.find { it.startsWith("postid-") }?.substringAfter("-")
-        ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
-        ?: return false
-
-    for (tab in listOf("p1", "p2", "p3")) {
-        runCatching {
-            val response = app.post(
-                url = "$mainUrl/wp-admin/admin-ajax.php",
-                data = mapOf(
-                    "action"  to "muvipro_player_content",
-                    "tab"     to tab,
-                    "post_id" to postId
-                ),
-                headers = mapOf(
-                    "Accept"           to "*/*",
-                    "X-Requested-With" to "XMLHttpRequest",
-                    "Content-Type"     to "application/x-www-form-urlencoded; charset=UTF-8",
-                    "Referer"          to data
-                )
-            ).text
-
-            val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
-            if (iframeSrc.isNotBlank()) {
-                val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
-
-                // Google Drive: ubah /preview -> /view agar extractor bawaan CloudStream bisa handle
-                val finalUrl = if (fixedUrl.contains("drive.google.com") && fixedUrl.contains("/preview")) {
-                    fixedUrl.replace("/preview", "/view")
-                } else {
-                    fixedUrl
+        data: String,
+        isCasting: Boolean,
+        subtitleCallback: (SubtitleFile) -> Unit,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        val document = app.get(data).document
+        var linkFound = false
+    
+        val postId = document.selectFirst("link[rel=shortlink]")?.attr("href")?.substringAfter("p=")
+            ?: document.selectFirst("body")?.classNames()
+                ?.find { it.startsWith("postid-") }?.substringAfter("-")
+            ?: document.selectFirst("article")?.attr("id")?.substringAfter("-")
+            ?: return false
+    
+        for (tab in listOf("p1", "p2", "p3")) {
+            runCatching {
+                val response = app.post(
+                    url = "$mainUrl/wp-admin/admin-ajax.php",
+                    data = mapOf(
+                        "action"  to "muvipro_player_content",
+                        "tab"     to tab,
+                        "post_id" to postId
+                    ),
+                    headers = mapOf(
+                        "Accept"           to "*/*",
+                        "X-Requested-With" to "XMLHttpRequest",
+                        "Content-Type"     to "application/x-www-form-urlencoded; charset=UTF-8",
+                        "Referer"          to data
+                    )
+                ).text
+    
+                val iframeSrc = Jsoup.parse(response).select("iframe").attr("src")
+                if (iframeSrc.isNotBlank()) {
+                    val fixedUrl = if (iframeSrc.startsWith("//")) "https:$iframeSrc" else iframeSrc
+    
+                    // Google Drive: ubah /preview -> /view agar extractor bawaan CloudStream bisa handle
+                    val finalUrl = if (fixedUrl.contains("drive.google.com") && fixedUrl.contains("/preview")) {
+                        fixedUrl.replace("/preview", "/view")
+                    } else {
+                        fixedUrl
+                    }
+    
+                    // Ikutin pola Anichin: 3 parameter saja
+                    loadExtractor(finalUrl, subtitleCallback, callback)
+                    linkFound = true
                 }
-
-                // Ikutin pola Anichin: 3 parameter saja
-                loadExtractor(finalUrl, subtitleCallback, callback)
-                linkFound = true
             }
         }
-    }
-
-    return linkFound
+    
+        return linkFound
 }
 
     private fun Element.toSearchResult(): SearchResponse? {
