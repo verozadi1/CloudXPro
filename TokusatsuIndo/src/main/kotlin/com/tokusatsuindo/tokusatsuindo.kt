@@ -33,11 +33,9 @@ class TokusatsuIndoProvider : MainAPI() {
         } else {
             "$mainUrl/${request.data}page/$page/"
         }
-
         val document = app.get(url).document
         val items = document.select("article.item").mapNotNull { it.toSearchResult() }
         val hasNext = document.select(".next.page-numbers").isNotEmpty() || items.isNotEmpty()
-
         return newHomePageResponse(request.name, items, hasNext)
     }
 
@@ -63,13 +61,11 @@ class TokusatsuIndoProvider : MainAPI() {
                 val epTitle = ep.text().trim()
                 val epNum = Regex("""(?i)episode\s*(\d+(?:\.\d+)?)""")
                     .find(epTitle)?.groupValues?.getOrNull(1)?.toFloatOrNull()
-
                 newEpisode(epUrl) {
                     this.name = epTitle
                     this.episode = epNum?.toInt()
                 }
             }.reversed()
-
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
                 this.posterUrl = poster
                 this.plot = description
@@ -90,38 +86,21 @@ class TokusatsuIndoProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        val html = app.get(
-            data,
-            headers = mapOf(
-                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Referer" to mainUrl
-            )
-        ).text
-        val document = Jsoup.parse(html)
         var linkFound = false
 
-        // Cari postId dari berbagai sumber termasuk JS inline
-        val postId =
-            Regex("""[?&]p=(\d+)""").find(
-                document.selectFirst("link[rel=shortlink]")?.attr("href") ?: ""
-            )?.groupValues?.getOrNull(1)
-            ?: Regex("""postid-(\d+)""").find(html)?.groupValues?.getOrNull(1)
-            ?: document.selectFirst("article[id]")?.attr("id")?.filter { it.isDigit() }
-            ?: Regex(""""postId"\s*:\s*"?(\d+)"?""").find(html)?.groupValues?.getOrNull(1)
-            ?: Regex("""post_id\s*[=:]\s*"?(\d+)"?""").find(html)?.groupValues?.getOrNull(1)
+        // Ambil slug dari URL, lalu cari postId via WordPress REST API
+        val slug = data.trimEnd('/').substringAfterLast('/')
+        val postId = runCatching {
+            val apiResponse = app.get(
+                "$mainUrl/wp-json/wp/v2/posts?slug=$slug",
+                headers = mapOf("Referer" to mainUrl)
+            ).text
+            Regex(""""id"\s*:\s*(\d+)""").find(apiResponse)?.groupValues?.getOrNull(1)
+        }.getOrNull()
 
-        // Fallback: ambil link download langsung dari HTML (tidak butuh AJAX)
-        document.select("a[href*='pndk.to'], a[href*='.mp4'], a[href*='drive.google.com']").forEach { el ->
-            val href = el.attr("href").takeIf { it.isNotBlank() } ?: return@forEach
-            val finalUrl = if (href.contains("drive.google.com") && href.contains("/preview"))
-                href.replace("/preview", "/view") else href
-            loadExtractor(finalUrl, subtitleCallback, callback)
-            linkFound = true
-        }
+        if (postId == null) return false
 
-        if (postId == null) return linkFound
-
-        // AJAX untuk streaming
+        // AJAX untuk ambil iframe streaming
         for (tab in listOf("p1", "p2")) {
             runCatching {
                 val response = app.post(
@@ -161,7 +140,6 @@ class TokusatsuIndoProvider : MainAPI() {
         val title = titleElement.text().trim()
         val href = titleElement.attr("href").takeIf { it.isNotBlank() } ?: return null
         val poster = selectFirst("img.wp-post-image")?.attr("src")?.takeIf { it.isNotBlank() }
-
         return newTvSeriesSearchResponse(title, href, TvType.TvSeries) {
             this.posterUrl = poster
         }
