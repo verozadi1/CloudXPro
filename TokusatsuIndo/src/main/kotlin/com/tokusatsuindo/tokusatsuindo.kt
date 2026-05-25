@@ -125,10 +125,11 @@ class TokusatsuIndoProvider : MainAPI() {
                             source = "Muvipro $tab", 
                             name = fixedUrl, // <--- Link aslinya bakal muncul di sini!
                             url = fixedUrl, 
-                            referer = mainUrl,
-                            quality = Qualities.Unknown.value,
                             type = ExtractorLinkType.VIDEO 
-                        )
+                        ) {
+                            this.referer = mainUrl
+                            this.quality = Qualities.Unknown.value
+                        }
                     )
                     linkFound = true
                 }
