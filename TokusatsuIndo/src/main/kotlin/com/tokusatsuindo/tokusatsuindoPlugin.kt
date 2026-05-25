@@ -7,7 +7,7 @@ import com.lagradost.cloudstream3.plugins.Plugin
 @CloudstreamPlugin
 class TokusatsuindoPlugin : Plugin() {
     override fun load(context: Context) {
-        registerMainAPI(TokusatsuindoProvider())
-        registerExtractorAPI(GdPlayer()) // <-- tambah ini
+        registerMainAPI(TokusatsuIndoProvider()) // I kapital
+        registerExtractorAPI(GdPlayer())
     }
 }
