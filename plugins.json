@@ -1339,10 +1339,10 @@
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tokusatsuindo.com&size=%size%",
-        "fileHash": "sha256-194a1ee6aa41b0418edffd55e400fea3073bf45c614fcb20941b47906af1f371",
+        "fileHash": "sha256-af632997bd221524846f59af3c8fa47fabbe6c08d2d004f022b10dfbf45a6772",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
-        "fileSize": 31104,
+        "fileSize": 31112,
         "status": 1,
         "language": "id",
         "authors": [
