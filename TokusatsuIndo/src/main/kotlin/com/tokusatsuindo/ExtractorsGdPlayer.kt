@@ -181,13 +181,11 @@ class GdPlayer : ExtractorApi() {
                 expr = expr.replace(emo, value)
             }
 
-            // Strip spaces and '+' FIRST!
             expr = expr.replace("+", "")
                 .replace(" ", "")
                 .replace("\n", "")
                 .replace("\r", "")
 
-            // Handle mathematical modifications inside octals/hexes AFTER stripping spaces!
             expr = expr.replace("(3-1)", "2")
             expr = expr.replace("(3-1-1)", "1")
             expr = expr.replace("(4-1)", "3")
