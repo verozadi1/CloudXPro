@@ -1,10 +1,7 @@
 package com.sokujaext
 
 import com.lagradost.cloudstream3.*
-import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.utils.*
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
 class Sokuja : MainAPI() {
@@ -19,7 +16,6 @@ class Sokuja : MainAPI() {
         TvType.Anime,
         TvType.AnimeMovie,
         TvType.OVA,
-        TvType.ONA,
     )
 
     override val mainPage = mainPageOf(
@@ -41,28 +37,16 @@ class Sokuja : MainAPI() {
         return if (url.isNullOrBlank()) null else fixUrl(url)
     }
 
-    private fun Element.toSearchResult(): AnimeSearchResponse? {
-        val a = this.selectFirst("a[href]") ?: return null
-        val href = a.attr("abs:href").ifBlank { a.attr("href") }.let(::fixUrl)
-        if (!href.contains("/anime/", ignoreCase = true)) return null
+    private fun Element.toAnimeCard(): AnimeSearchResponse? {
+        val linkEl = this.selectFirst("a[href*=/anime/], a[href*=/series/]")
+            ?: this.selectFirst("a[href]")
+            ?: return null
+        val href = linkEl.attr("abs:href").ifBlank { linkEl.attr("href") }.let(::fixUrl)
+        if (href.contains("/episode-", ignoreCase = true)) return null
         val poster = this.selectFirst("img")?.let {
             fixUrlNull(it.attr("data-src").ifBlank { it.attr("src") })
         }
         val title = this.selectFirst("b, strong, .tt, .title, h2, h3")?.text()?.trim()
-            ?: a.attr("title")?.trim()
-            ?: return null
-        return newAnimeSearchResponse(title, href, TvType.Anime) {
-            this.posterUrl = poster
-        }
-    }
-
-    private fun Element.toAnimeCard(): AnimeSearchResponse? {
-        val linkEl = this.selectFirst("a[href*=/anime/]") ?: return null
-        val href = linkEl.attr("abs:href").ifBlank { linkEl.attr("href") }.let(::fixUrl)
-        val poster = this.selectFirst("img")?.let {
-            fixUrlNull(it.attr("data-src").ifBlank { it.attr("src") })
-        }
-        val title = this.selectFirst("b, strong")?.text()?.trim()
             ?: linkEl.attr("title")?.trim()
             ?: return null
         return newAnimeSearchResponse(title, href, TvType.Anime) {
@@ -99,13 +83,8 @@ class Sokuja : MainAPI() {
         val document = app.get(url).document
 
         val title = document.selectFirst("h1.entry-title, h1.title, .entry-title, h1")
-            ?.text()
-            ?.trim()
-            ?.ifBlank { null }
-            ?: document.selectFirst("title")
-                ?.text()
-                ?.replace(Regex(" \\| .*"), "")
-                ?.trim()
+            ?.text()?.trim()?.ifBlank { null }
+            ?: document.selectFirst("title")?.text()?.replace(Regex(" \\| .*"), "")?.trim()
             ?: throw ErrorLoadingException("Missing title")
 
         val poster = document.selectFirst("img.wp-post-image, .thumb img, .poster img, .thumbnail img")
@@ -113,56 +92,38 @@ class Sokuja : MainAPI() {
             ?: document.selectFirst("meta[property=og:image]")?.attr("content")?.let(::fixUrlNull)
 
         val synopsis = document.selectFirst(".entry-content, .desc, .sinop, .contentpm p, .sinops")
-            ?.text()
-            ?.trim()
-            ?.ifBlank { null }
+            ?.text()?.trim()?.ifBlank { null }
 
         val tags = document.select(".genre a, .genre-info a, .tag a, .meta-genre a")
-            .map { it.text().trim().trimEnd(',') }
-            .filter { it.isNotEmpty() }
-
-        val rows = document.select(".spe span, .infox p, .meta span")
-        fun rowValue(label: String): String? {
-            return rows.firstOrNull {
-                it.text().startsWith("$label:", ignoreCase = true)
-            }?.text()
-                ?.replace("$label:", "", ignoreCase = true)
-                ?.trim()
-                ?.ifBlank { null }
-        }
+            .map { it.text().trim().trimEnd(',') }.filter { it.isNotEmpty() }
 
         val year = Regex("(19|20)\\d{2}").find(
-            rowValue("Tahun") ?: document.selectFirst(".year, .spe span:contains(Tahun)")?.text()?.trim() ?: ""
+            document.selectFirst(".year, .spe span:contains(Tahun)")?.text()?.trim() ?: ""
         )?.value?.toIntOrNull()
 
-        val typeText = rowValue("Tipe") ?: ""
-        val statusText = rowValue("Status") ?: ""
+        val typeText = document.selectFirst(".spe span:contains(Tipe)")?.text()?.trim() ?: ""
 
-        // Episode list
         val episodeElements = document.select(".lstepsiode ul li, .episodelist ul li, .episode-list li, .bxcl li")
         val episodes = episodeElements.mapNotNull { epEl ->
             val epA = epEl.selectFirst("a[href]") ?: return@mapNotNull null
             val epHref = epA.attr("abs:href").ifBlank { epA.attr("href") }.let(::fixUrl)
             val epName = epA.text().trim().ifBlank { epEl.text().trim() }
-            Episode(
-                data = epHref,
-                name = epName,
-            )
+            newEpisode(epHref) {
+                this.name = epName
+            }
         }.reversed()
 
-        // Check if movie
-        val isMovie = typeText.contains("Movie", ignoreCase = true) ||
-            document.selectFirst(".badge-type")?.text()?.contains("Movie", ignoreCase = true) == true
+        val isMovie = typeText.contains("Movie", ignoreCase = true)
 
-        if (isMovie || episodes.isEmpty()) {
-            return newMovieLoadResponse(title, url, TvType.Anime, url) {
+        return if (isMovie || episodes.isEmpty()) {
+            newMovieLoadResponse(title, url, TvType.Anime, url) {
                 this.posterUrl = poster
                 this.plot = synopsis
                 this.tags = tags
                 this.year = year
             }
         } else {
-            return newTvSeriesLoadResponse(title, url, TvType.Anime, episodes) {
+            newTvSeriesLoadResponse(title, url, TvType.Anime, episodes) {
                 this.posterUrl = poster
                 this.plot = synopsis
                 this.tags = tags
@@ -198,7 +159,7 @@ class Sokuja : MainAPI() {
                     label?.contains("720", ignoreCase = true) == true -> Qualities.P720.value
                     label?.contains("480", ignoreCase = true) == true -> Qualities.P480.value
                     label?.contains("360", ignoreCase = true) == true -> Qualities.P360.value
-                    else -> getQualityFromUrl(videoUrl)
+                    else -> Qualities.Unknown.value
                 }
                 callback(
                     ExtractorLink(
@@ -213,42 +174,6 @@ class Sokuja : MainAPI() {
             }
         }
 
-        // Try to find download/embed links from quality buttons or download section
-        // Sokuja uses sokuja.id/x.php?y=... encrypted download links
-        document.select(".download a[href], .mirror a[href], a[data-link]").forEach { link ->
-            val href = link.attr("abs:href").ifBlank { link.attr("href") }.let(::fixUrl)
-            if (href.isNotBlank() && !href.contains("sokuja.id/x.php")) {
-                val qualityText = link.text().trim()
-                val quality = when {
-                    qualityText.contains("1080", ignoreCase = true) -> Qualities.P1080.value
-                    qualityText.contains("720", ignoreCase = true) -> Qualities.P720.value
-                    qualityText.contains("480", ignoreCase = true) -> Qualities.P480.value
-                    qualityText.contains("360", ignoreCase = true) -> Qualities.P360.value
-                    else -> Qualities.Unknown.value
-                }
-                callback(
-                    ExtractorLink(
-                        source = name,
-                        name = "$name ${qualityText.ifBlank { "Download" }}",
-                        url = href,
-                        referer = data,
-                        quality = quality,
-                        type = ExtractorLinkType.VIDEO
-                    )
-                )
-            }
-        }
-
         return true
-    }
-
-    private fun getQualityFromUrl(url: String): Int {
-        return when {
-            url.contains("1080", ignoreCase = true) -> Qualities.P1080.value
-            url.contains("720", ignoreCase = true) -> Qualities.P720.value
-            url.contains("480", ignoreCase = true) -> Qualities.P480.value
-            url.contains("360", ignoreCase = true) -> Qualities.P360.value
-            else -> Qualities.Unknown.value
-        }
     }
 }
