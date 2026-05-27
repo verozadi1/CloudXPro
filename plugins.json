@@ -1291,6 +1291,29 @@
         "name": "Sflix"
     },
     {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://x5.sokuja.uk&size=%size%",
+        "fileHash": "sha256-127de044bbaf15dde5052e65e5cf4bb5f84a73ba8a0c88b3efa77859b24173de",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 14612,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "AiCurv"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "OVA",
+            "ONA"
+        ],
+        "version": 1,
+        "internalName": "Sokuja",
+        "description": "Nonton & Download Anime Subtitle Indonesia",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Sokuja.cs3",
+        "name": "Sokuja"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://sontolfilm.com&size=%size%",
         "fileHash": "sha256-3d13b0d1d83178e26cabadecedadf920af87aae4a810ae22971499c6c8e9e679",
         "apiVersion": 1,
@@ -1360,24 +1383,23 @@
         "name": "TokusatsuIndo"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tvtokusatsuindo.com/&size=%size%",
-        "fileHash": "sha256-c7af7713613172ccdf544cebaa8021f8e2ff858df21e064b6d1e91338b8e5b66",
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.tvtokusatsuindo.com&size=%size%",
+        "fileHash": "sha256-3335aa8340a111304f89c00d0907aefd2b6c17653f7a70437dffc02460779282",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
-        "fileSize": 12880,
+        "fileSize": 13814,
         "status": 1,
         "language": "id",
         "authors": [
-            "verozadi"
+            "AiCurv"
         ],
         "tvTypes": [
-            "TvSeries",
-            "Movie",
-            "AsianDrama"
+            "Anime",
+            "AnimeMovie"
         ],
         "version": 1,
         "internalName": "TVTokusatsuIndo",
-        "description": "TV Tokusatsu Indo\ud83e\udd29",
+        "description": "Nonton Streaming Online Kamen Rider, Ultraman, Power Ranger, Super Sentai",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/TVTokusatsuIndo.cs3",
         "name": "TVTokusatsuIndo"
     },
