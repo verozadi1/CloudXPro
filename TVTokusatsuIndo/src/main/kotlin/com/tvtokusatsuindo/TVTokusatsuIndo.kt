@@ -132,12 +132,14 @@ class TVTokusatsuIndo : MainAPI() {
                 val driveUrl = btn.selectFirst("a[href]")?.attr("href")
                     ?: btn.attr("onclick")?.let { Regex("'([^']+)'").find(it)?.groupValues?.get(1) }
                     ?: return@forEach
-                episodes.add(Episode(data = driveUrl, name = epName))
+                newEpisode(driveUrl) { this.name = epName }
+                    .let { episodes.add(it) }
             }
         } else if (driveLinks.isNotEmpty()) {
             driveLinks.forEach { link ->
                 val epName = link.parent()?.text()?.trim()?.take(80)?.ifBlank { "Movie" } ?: "Movie"
-                episodes.add(Episode(data = link.attr("href"), name = epName))
+                newEpisode(link.attr("href")) { this.name = epName }
+                    .let { episodes.add(it) }
             }
         }
 
@@ -145,7 +147,8 @@ class TVTokusatsuIndo : MainAPI() {
         if (episodes.isEmpty()) {
             document.select("a[href*=drive.google.com]").forEach { link ->
                 val epName = link.parent()?.text()?.trim()?.take(80)?.ifBlank { "Movie" } ?: "Movie"
-                episodes.add(Episode(data = link.attr("href"), name = epName))
+                newEpisode(link.attr("href")) { this.name = epName }
+                    .let { episodes.add(it) }
             }
         }
 
