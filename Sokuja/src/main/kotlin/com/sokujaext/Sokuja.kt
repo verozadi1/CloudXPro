@@ -33,20 +33,17 @@ class Sokuja : MainAPI() {
         return url
     }
 
-    private fun fixUrlNull(url: String?): String? {
-        return if (url.isNullOrBlank()) null else fixUrl(url)
-    }
+    private fun fixUrlNull(url: String?): String? =
+        if (url.isNullOrBlank()) null else fixUrl(url)
 
-    private fun Element.toAnimeCard(): AnimeSearchResponse? {
-        val linkEl = this.selectFirst("a[href*=/anime/], a[href*=/series/]")
-            ?: this.selectFirst("a[href]")
-            ?: return null
+    private fun parseAnimeCard(element: Element): AnimeSearchResponse? {
+        val linkEl = element.selectFirst("a[href*=/anime/]") ?: return null
         val href = linkEl.attr("abs:href").ifBlank { linkEl.attr("href") }.let(::fixUrl)
         if (href.contains("/episode-", ignoreCase = true)) return null
-        val poster = this.selectFirst("img")?.let {
+        val poster = element.selectFirst("img")?.let {
             fixUrlNull(it.attr("data-src").ifBlank { it.attr("src") })
         }
-        val title = this.selectFirst("b, strong, .tt, .title, h2, h3")?.text()?.trim()
+        val title = element.selectFirst("b, strong")?.text()?.trim()
             ?: linkEl.attr("title")?.trim()
             ?: return null
         return newAnimeSearchResponse(title, href, TvType.Anime) {
@@ -58,26 +55,73 @@ class Sokuja : MainAPI() {
         val separator = if (request.data.contains("?")) "&" else "?"
         val url = if (page > 1) "${request.data}${separator}page=$page" else request.data
         val document = app.get(url).document
-        val home = document.select("article, .bs, .bsx, .animposfix, .listupd .bsx, .animepost").mapNotNull {
-            it.toAnimeCard()
+
+        val home = mutableListOf<AnimeSearchResponse>()
+        val seen = mutableSetOf<String>()
+
+        // Strategy 1: Try CSS class selectors (WordPress/DooPlay style)
+        val selectors = listOf(".bsx", ".animposfix", ".animepost", "article", ".bs")
+        var parsed = false
+        for (sel in selectors) {
+            val items = document.select(sel)
+            if (items.isNotEmpty()) {
+                val results = items.mapNotNull { parseAnimeCard(it) }
+                if (results.isNotEmpty()) {
+                    home.addAll(results)
+                    parsed = true
+                    break
+                }
+            }
         }
-        return newHomePageResponse(
-            list = HomePageList(request.name, home),
-            hasNext = document.select(".pagination a, .hpage a, a.next, .page-numbers").isNotEmpty()
-        )
+
+        // Strategy 2: Find all /anime/ links and build cards from their parent containers
+        if (!parsed) {
+            document.select("a[href*=/anime/]").forEach { a ->
+                val href = a.attr("abs:href").ifBlank { a.attr("href") }.let(::fixUrl)
+                if (href in seen || href.contains("/episode-", ignoreCase = true)) return@forEach
+                seen.add(href)
+                val card = a.closest("article, .bsx, .animposfix, .animepost") ?: a.parent() ?: a
+                val poster = card.selectFirst("img")?.let {
+                    fixUrlNull(it.attr("data-src").ifBlank { it.attr("src") })
+                }
+                val title = card.selectFirst("b, strong")?.text()?.trim()
+                    ?: a.attr("title")?.trim()
+                    ?: return@forEach
+                home.add(newAnimeSearchResponse(title, href, TvType.Anime) {
+                    this.posterUrl = poster
+                })
+            }
+        }
+
+        val hasNext = document.select(".pagination a, .hpage a, a.next, .page-numbers").isNotEmpty()
+        return newHomePageResponse(HomePageList(request.name, home), hasNext)
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
         val q = query.trim().replace(Regex("\\s+"), "+")
         val document = app.get("$mainUrl/?s=$q").document
-        return document.select("article, .bs, .bsx, .result-item, .animposfix, .animepost").mapNotNull {
-            it.toAnimeCard()
+        val results = mutableListOf<AnimeSearchResponse>()
+        val seen = mutableSetOf<String>()
+
+        document.select("a[href*=/anime/]").forEach { a ->
+            val href = a.attr("abs:href").ifBlank { a.attr("href") }.let(::fixUrl)
+            if (href in seen) return@forEach
+            seen.add(href)
+            val card = a.closest("article, .bsx, .animposfix, .animepost") ?: a.parent() ?: a
+            val poster = card.selectFirst("img")?.let {
+                fixUrlNull(it.attr("data-src").ifBlank { it.attr("src") })
+            }
+            val title = card.selectFirst("b, strong")?.text()?.trim()
+                ?: a.attr("title")?.trim()
+                ?: return@forEach
+            results.add(newAnimeSearchResponse(title, href, TvType.Anime) {
+                this.posterUrl = poster
+            })
         }
+        return results
     }
 
-    override suspend fun quickSearch(query: String): List<SearchResponse> {
-        return search(query)
-    }
+    override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)
 
     override suspend fun load(url: String): LoadResponse {
         val document = app.get(url).document
@@ -103,15 +147,28 @@ class Sokuja : MainAPI() {
 
         val typeText = document.selectFirst(".spe span:contains(Tipe)")?.text()?.trim() ?: ""
 
-        val episodeElements = document.select(".lstepsiode ul li, .episodelist ul li, .episode-list li, .bxcl li")
-        val episodes = episodeElements.mapNotNull { epEl ->
-            val epA = epEl.selectFirst("a[href]") ?: return@mapNotNull null
-            val epHref = epA.attr("abs:href").ifBlank { epA.attr("href") }.let(::fixUrl)
-            val epName = epA.text().trim().ifBlank { epEl.text().trim() }
-            newEpisode(epHref) {
-                this.name = epName
+        // Parse episode list from multiple possible selectors
+        val episodeSelectors = listOf(
+            ".lstepsiode ul li",
+            ".episodelist ul li",
+            ".episode-list li",
+            ".bxcl li",
+            ".listepisode li",
+        )
+        val episodes = mutableListOf<Episode>()
+        for (sel in episodeSelectors) {
+            val items = document.select(sel)
+            if (items.isNotEmpty()) {
+                episodes.addAll(items.mapNotNull { epEl ->
+                    val epA = epEl.selectFirst("a[href]") ?: return@mapNotNull null
+                    val epHref = epA.attr("abs:href").ifBlank { epA.attr("href") }.let(::fixUrl)
+                    val epName = epA.text().trim().ifBlank { epEl.text().trim() }
+                    newEpisode(epHref) { this.name = epName }
+                })
+                if (episodes.isNotEmpty()) break
             }
-        }.reversed()
+        }
+        if (episodes.size > 1) episodes.reverse()
 
         val isMovie = typeText.contains("Movie", ignoreCase = true)
 
@@ -140,13 +197,10 @@ class Sokuja : MainAPI() {
     ): Boolean {
         val document = app.get(data).document
 
-        // Try iframe embeds
+        // Try iframe embeds first
         document.select("iframe[src]").forEach { iframe ->
-            var src = iframe.attr("abs:src").ifBlank { iframe.attr("src") }
-            src = fixUrl(src)
-            if (src.isNotBlank()) {
-                loadExtractor(src, data, subtitleCallback, callback)
-            }
+            val src = iframe.attr("abs:src").ifBlank { iframe.attr("src") }.let(::fixUrl)
+            if (src.isNotBlank()) loadExtractor(src, data, subtitleCallback, callback)
         }
 
         // Try video source tags
@@ -155,22 +209,20 @@ class Sokuja : MainAPI() {
             if (videoUrl.isNotBlank()) {
                 val label = src.attr("title")
                 val quality = when {
-                    label?.contains("1080", ignoreCase = true) == true -> Qualities.P1080.value
-                    label?.contains("720", ignoreCase = true) == true -> Qualities.P720.value
-                    label?.contains("480", ignoreCase = true) == true -> Qualities.P480.value
-                    label?.contains("360", ignoreCase = true) == true -> Qualities.P360.value
+                    label.contains("1080", ignoreCase = true) -> Qualities.P1080.value
+                    label.contains("720", ignoreCase = true) -> Qualities.P720.value
+                    label.contains("480", ignoreCase = true) -> Qualities.P480.value
+                    label.contains("360", ignoreCase = true) -> Qualities.P360.value
                     else -> Qualities.Unknown.value
                 }
-                callback(
-                    ExtractorLink(
-                        source = name,
-                        name = "$name ${label.ifBlank { "Video" }}",
-                        url = videoUrl,
-                        referer = data,
-                        quality = quality,
-                        type = if (videoUrl.contains(".m3u8")) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
-                    )
-                )
+                callback(ExtractorLink(
+                    source = name,
+                    name = "$name ${label.ifBlank { "Video" }}",
+                    url = videoUrl,
+                    referer = data,
+                    quality = quality,
+                    type = if (videoUrl.contains(".m3u8")) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
+                ))
             }
         }
 
