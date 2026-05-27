@@ -978,6 +978,48 @@
         "name": "IdlixProvider"
     },
     {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=indo18.com&sz=%size%",
+        "fileHash": "sha256-94cdc064c15ed8fc4b8eeb61ac6b20148ae835f5b735e5a91a6c072854a9c619",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 38268,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 3,
+        "internalName": "Indo18",
+        "description": "Indo18 provider for indo18.com with safe adult categories, search, detail parsing, related videos, jomblo/playmogo wrapper support, direct playback, packed script extraction, iframe fallback, nested host resolving, and public HLS/MP4 detection.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Indo18.cs3",
+        "name": "Indo18"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=89.124.111.64&sz=%size%",
+        "fileHash": "sha256-02e74d08afca961f8480068c6dc823c49e7c21acce5bd78f5af56752a9fc333d",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 44711,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 4,
+        "internalName": "IndoDrama21",
+        "description": "IndoDrama21 active IP build with compact website-backed categories, stable episode mapping, and hardened playback extraction.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/IndoDrama21.cs3",
+        "name": "IndoDrama21"
+    },
+    {
         "iconUrl": "https://homecookingrocks.com/wp-content/uploads/2024/10/cropped-indomax21-favicon-color-1.png",
         "fileHash": "sha256-c6bf0c183001b1a3835aa86a9b9594509986956146ed4124f8ad8f34667c5802",
         "apiVersion": 1,
@@ -998,6 +1040,86 @@
         "name": "IndoMax21Provider"
     },
     {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=uncutmaza.cc&sz=%size%",
+        "fileHash": "sha256-3c5c357f557ef7d611a90a2fd7af6889d675da5dbe32b2bb8cb25f28a63447da",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 10503,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 5,
+        "internalName": "InternetChicks",
+        "description": "InternetChicks",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/InternetChicks.cs3",
+        "name": "InternetChicks"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=javfc2.xyz&sz=256",
+        "fileHash": "sha256-52e379249e41797984cd5e3641cb29434ac3dfeb953ed747e91f99ec95499875",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 29750,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 6,
+        "internalName": "JavFC",
+        "description": "JavFC provider with refreshed categories, tolerant parsing, keyed episode playback, classic player src recovery, URL-decoded media candidates, and hardened extractor handling.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JavFC.cs3",
+        "name": "JavFC"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=jav.guru&sz=%size%",
+        "fileHash": "sha256-fa1c9c91052045d25d2e112522d9316b78e1eb786926ab7d5f630af600b24db5",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 38284,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 11,
+        "internalName": "JavGuru",
+        "description": "JavGuru",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JavGuru.cs3",
+        "name": "JavGuru"
+    },
+    {
+        "iconUrl": "https://javhd.today/logo/javhd1.png",
+        "fileHash": "sha256-c62a6216abb67629295a090489be092d8c8994a42898ee12f9bc2f34a3fa9687",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 32817,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 7,
+        "internalName": "JAVHd",
+        "description": "Provider JAVHD dengan kategori situs yang dirapikan, pencarian, subtitle eksternal, dan extractor playback aktif.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JAVHd.cs3",
+        "name": "JAVHd"
+    },
+    {
         "iconUrl": "https://missav.ws/missav/logo-square.png",
         "fileHash": "sha256-7c85c08b533eaf1a11ddaa8fab45ca8006f38140fad7e89111b518e12e3eeda7",
         "apiVersion": 1,
@@ -1016,6 +1138,89 @@
         "description": "Best Japan AV porn site, free forever, high speed, no lag, over 100,000 videos, daily update, no ads while playing video.",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JavHey.cs3",
         "name": "JavHey"
+    },
+    {
+        "iconUrl": "https://homecookingrocks.com/wp-content/uploads/2024/10/cropped-indomax21-favicon-color-1.png",
+        "fileHash": "sha256-058e3ab4ba9ea98141a4419273a97fb93d053c9e60f3510a3cbfb516c2e8df15",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24172,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 3,
+        "internalName": "JavHeyProvider",
+        "description": "IndoMax21 \u2014 Streaming Anime, Donghua, Hentai, Porn, Movie and TV Series",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JavHeyProvider.cs3",
+        "name": "JavHeyProvider"
+    },
+    {
+        "iconUrl": "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://javtiful.com/main&size=128",
+        "fileHash": "sha256-fadbc386e356427d3184f2ac0f84c07800a4406bf55d5ab1e275f5f90253abcf",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 17053,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 6,
+        "internalName": "Javtiful",
+        "description": "Watch more than 60,000 Full HD JAV Online For Free at Javtiful",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Javtiful.cs3",
+        "name": "Javtiful"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=javx.org&sz=%size%",
+        "fileHash": "sha256-5924e2c2959891d4ff59b83f4ce31a244d30e1f0f2da99c26b2fd392ed257cd3",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 16365,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 4,
+        "internalName": "Javx",
+        "description": "JAVX provider by sad25kag with source-backed categories and stable playback handling.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Javx.cs3",
+        "name": "Javx"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=z1.idlixku.com&sz=%size%",
+        "fileHash": "sha256-f99d2015ed49d66088bce07425002e3c217c07b81d78032584690354a88db1ca",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 60931,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 13,
+        "internalName": "JuraganFilm",
+        "description": "JuraganFilm provider with current IDLIX API catalog, session-based playback resolver, subtitles, and Majorplay/Jeniusplay fallback extractors.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/JuraganFilm.cs3",
+        "name": "JuraganFilm"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://tv2.kawanfilm21.co&size=%size%",
@@ -1059,6 +1264,26 @@
         "internalName": "KazefuriProvider",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KazefuriProvider.cs3",
         "name": "KazefuriProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=kingbokep.tv&sz=256",
+        "fileHash": "sha256-2cd25807e4e26094082aa2e3effd0d3225b6c7902d81a1d9f1c674290b61e14c",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 34092,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Betbet"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 2,
+        "internalName": "KingBokep",
+        "description": "KingBokep provider dengan struktur split dan kategori terbaru dari website sumber.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KingBokep.cs3",
+        "name": "KingBokep"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://kissasian.cam&size=%size%",
@@ -1149,6 +1374,26 @@
         "name": "Klikxxi"
     },
     {
+        "iconUrl": "https://krx18.com/wp-content/uploads/2022/10/krx18B.png",
+        "fileHash": "sha256-0ee5bd8e80ef1ba34091bdc311951e4706707596bd0598b67a75094d5aa66b28",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 22040,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 9,
+        "internalName": "KRX18",
+        "description": "18+ Asian",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/KRX18.cs3",
+        "name": "KRX18"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v17.kuramanime.ink&size=%size%",
         "fileHash": "sha256-a7705d7831c4f59271f5d68b464298e5a96999a608f3d3b8ea7c7480c330008b",
         "apiVersion": 1,
@@ -1192,26 +1437,26 @@
         "name": "KuronimeProvider"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://layarasia.site&size=%size%",
-        "fileHash": "sha256-c87a0e416600cfce8bb6232dc26fa0811ab70584ce91f37dce6513a148d1b834",
+        "iconUrl": "https://www.google.com/s2/favicons?domain=layarasia.lol&sz=%size%",
+        "fileHash": "sha256-ee26a1824541d2f732b718c7093785f3d6bd8657ec5e82164695b34e8eb4b033",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
-        "fileSize": 27090,
+        "fileSize": 32445,
         "status": 1,
         "language": "id",
         "authors": [
-            "Duro92"
+            "sad25kag"
         ],
         "tvTypes": [
-            "AsianDrama",
+            "Movie",
             "TvSeries",
-            "Movie"
+            "AsianDrama"
         ],
         "version": 3,
-        "internalName": "Layarasia",
-        "description": "Layarasia",
-        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Layarasia.cs3",
-        "name": "Layarasia"
+        "internalName": "LayarAsiaProvider",
+        "description": "LayarAsia provider with clean Asian drama/movie categories and compile-safe extractor registrations.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/LayarAsiaProvider.cs3",
+        "name": "LayarAsiaProvider"
     },
     {
         "iconUrl": "https://www.google.com/s2/favicons?domain=tv7.lk21.am.in&sz=%size%",
@@ -1382,27 +1627,23 @@
         "name": "NekokunProvider"
     },
     {
-        "iconUrl": "https://raw.githubusercontent.com/Sushan64/NetMirror-Extension/refs/heads/master/Netmirror/logo.jpeg",
-        "fileHash": "sha256-93359970af1c466309f78dbeefbcedc504fb088f15dd85a20c5ac5c9608b10f7",
+        "iconUrl": "https://www.google.com/s2/favicons?domain=nekopoi.care&sz=%size%",
+        "fileHash": "sha256-8bb29a99968cd241049f8a5bea775f47d5cc7f0162d37cd5eeedb77f289edf7f",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
-        "fileSize": 52644,
+        "fileSize": 7921,
         "status": 1,
         "language": "id",
         "authors": [
-            "Duro92"
+            "BetbetMiro"
         ],
         "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
+            "NSFW"
         ],
         "version": 1,
-        "internalName": "NetMirrorProvider",
-        "description": "NetMirror search and streaming provider with live playlist fallback.",
-        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NetMirrorProvider.cs3",
-        "name": "NetMirrorProvider"
+        "internalName": "Nekopoi",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Nekopoi.cs3",
+        "name": "Nekopoi"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://new18.ngefilm.site&size=%size%",
@@ -1489,6 +1730,26 @@
         "internalName": "NontonAnimeIDProvider",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NontonAnimeIDProvider.cs3",
         "name": "NontonAnimeIDProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=noodlemagazine.com/&sz=%size%",
+        "fileHash": "sha256-de6c619c08852dece401719bb0b18e2d24c731231bff240c4ec6f907459cc8c4",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 11546,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 14,
+        "internalName": "NoodleMagazineProvider",
+        "description": "type .nofap in discord - Full Length",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/NoodleMagazineProvider.cs3",
+        "name": "NoodleMagazineProvider"
     },
     {
         "iconUrl": "https://www.google.com/s2/favicons?domain=onetouchtv.xyz/&sz=%size%",
