@@ -28,10 +28,12 @@ class DubbindoProvider : MainAPI() {
     override var lang = "id"
     override val hasMainPage = true
     override val hasDownloadSupport = true
+    override val hasQuickSearch = true
 
     override val supportedTypes = setOf(
         TvType.Movie,
         TvType.TvSeries,
+        TvType.Cartoon,
         TvType.AnimeMovie,
         TvType.Anime,
     )
