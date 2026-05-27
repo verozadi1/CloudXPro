@@ -323,10 +323,10 @@
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.dubbindo.site&size=%size%",
-        "fileHash": "sha256-0dc4ee23709252d9a8a5305a348e8b5fd83b679453882e5340bd8e03c51aff3f",
+        "fileHash": "sha256-a5ba1abab817b50013197458e87406406618da102d88f7f720b19f08eb8e2cdf",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
-        "fileSize": 16712,
+        "fileSize": 16810,
         "status": 1,
         "language": "id",
         "authors": [
