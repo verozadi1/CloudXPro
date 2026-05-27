@@ -1,5 +1,47 @@
 [
     {
+        "iconUrl": "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://allpornstream.com/&size=128",
+        "fileHash": "sha256-84428e023c4f196b64270accd566760aeddeeb1c860fd00ba685fb11c1a30d4b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 18582,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 2,
+        "internalName": "Allpornstream",
+        "description": "Semua Aliran Porno - Video HD Porno Gratis. Tonton film seks definisi tinggi terbaik dengan gadis-gadis seksi. Allpornstream.com memberi Anda ribuan video porno 1080p, 4k, dan gratis, hd porn tube",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Allpornstream.cs3",
+        "name": "Allpornstream"
+    },
+    {
+        "iconUrl": "https://cloudstream.zvlz.my.id/icon/alqanime.png",
+        "fileHash": "sha256-636228191ea483079a0773ca6d2bed752da53f19a3599fadac3b6b150d0e1b3f",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 29077,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime"
+        ],
+        "version": 7,
+        "internalName": "Alqanime",
+        "description": "Nonton & Download Anime Subtitle Indonesia",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Alqanime.cs3",
+        "name": "Alqanime"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.club&size=%size%",
         "fileHash": "sha256-df3226ec89fdd0b4c7d3d4dbef41353335a0d4bd2e3936e51d546f2d27e40a7a",
         "apiVersion": 1,
@@ -41,6 +83,28 @@
         "internalName": "Animasu",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Animasu.cs3",
         "name": "Animasu"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=https://anime-indo.lol&sz=%size%",
+        "fileHash": "sha256-5f1cb1ebd6678cadde7a4b11159da031a0ede73bbe14cec54e009ac677b65416",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24452,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "OVA",
+            "Anime",
+            "Movie"
+        ],
+        "version": 2,
+        "internalName": "AnimeIndo",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnimeIndo.cs3",
+        "name": "AnimeIndo"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://154.26.137.28&size=%size%",
@@ -105,6 +169,26 @@
         "internalName": "AnixCafeProvider",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnixCafeProvider.cs3",
         "name": "AnixCafeProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=anizone.to&sz=256",
+        "fileHash": "sha256-d6a809164882ac4b3312358e1d56a1ce851657da4653210d55a8c31bc8bf4219",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 25079,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "Anime"
+        ],
+        "version": 4,
+        "internalName": "AnizoneProvider",
+        "description": "AniZone.to - anime subtitle dan multi-dubbing",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AnizoneProvider.cs3",
+        "name": "AnizoneProvider"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://anoboy.be&size=%size%",
@@ -190,6 +274,48 @@
         "description": "Azmovies",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Azmovies.cs3",
         "name": "Azmovies"
+    },
+    {
+        "iconUrl": "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.aznude.com/&size=48",
+        "fileHash": "sha256-c836434e32881dbe9986bbfd7e9af5173f7d83995dde17f56b0dd2cf3a96fbef",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 31153,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 8,
+        "internalName": "AZNude",
+        "description": "Welcome to AZNUDE! We have a large, free, every day growing universe of celebrity nudity where stars from all movies and series shine.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/AZNude.cs3",
+        "name": "AZNude"
+    },
+    {
+        "iconUrl": "https://play-lh.googleusercontent.com/G9s84Cm1TDnKDX2P8nipS_s60cuCnYtjBRRLespF8nivjXmbV9tF1fY37clZhXMLaA",
+        "fileHash": "sha256-14c6dd3fe79b5f55f137542591470b8fbfd6c558653f6b050a2956e043590dfe",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 80330,
+        "status": 3,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "Anime",
+            "Movie",
+            "TvSeries"
+        ],
+        "version": 8,
+        "internalName": "BilibiliProvider",
+        "description": "Bilibili TV - Anime, film, serial, dan konten Asia dari bilibili.tv",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/BilibiliProvider.cs3",
+        "name": "BilibiliProvider"
     },
     {
         "fileHash": "sha256-ba8f8ebc2805c86d78d2e29e50a934d5d54d648931941b14c4930e45664d5924",
@@ -278,6 +404,27 @@
         "name": "Donghub"
     },
     {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=dracinema.com&sz=%size%",
+        "fileHash": "sha256-a904136ef0487b759f7aaf75ebf8917716b578bf11f3b9c5c9b064e272754c61",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24108,
+        "status": 3,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries"
+        ],
+        "version": 2,
+        "internalName": "Dracinema",
+        "description": "Provider CloudStream untuk Dracinema - drama China, Korea, dan short drama subtitle Indonesia.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Dracinema.cs3",
+        "name": "Dracinema"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drakorid.co&size=%size%",
         "fileHash": "sha256-f6b53b552967e6a38d9734c74ddf826283d9cceb749f5466e3fdeb558b414060",
         "apiVersion": 1,
@@ -300,6 +447,29 @@
         "name": "DrakoridProvider"
     },
     {
+        "iconUrl": "https://klikxxi.me/wp-content/uploads/2024/02/cropped-site-icon.png",
+        "fileHash": "sha256-8ad192df1b3517d26935c618bb1c38b2746b2611178699e1294b8cd7b86d3bd4",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 233769,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie",
+            "Anime"
+        ],
+        "version": 4,
+        "internalName": "DrakorProvider",
+        "description": "Drakor \u2014 Streaming Drama Korean, Movie and TV Series",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/DrakorProvider.cs3",
+        "name": "DrakorProvider"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama.sansekai.my.id&size=%size%",
         "fileHash": "sha256-41e725482248b5af241d6f13b677ec2573bae139906e7b3763e1829d916ade8f",
         "apiVersion": 1,
@@ -319,6 +489,28 @@
         "description": "DramaBox provider via Sansekai API",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Dramabox.cs3",
         "name": "Dramabox"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%",
+        "fileHash": "sha256-82bd2d3739027410f5024f1a813fb8ee92c72c762141c6d520c4ab67882c6685",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 46572,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 8,
+        "internalName": "DramaIdProvider",
+        "description": "DramaID - drama Asia subtitle Indonesia.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/DramaIdProvider.cs3",
+        "name": "DramaIdProvider"
     },
     {
         "iconUrl": "https://www.google.com/s2/favicons?domain=www.dubbindo.site&sz=%size%",
@@ -367,6 +559,26 @@
         "name": "Dutamovie"
     },
     {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=google.com&sz=256",
+        "fileHash": "sha256-f106c51c5990a374bbe5252225e8737243ff75a0a318a86f93ba0a96e9dec1e6",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 35525,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "Others"
+        ],
+        "version": 17,
+        "internalName": "Extractors",
+        "description": "Extractors for my sources",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Extractors.cs3",
+        "name": "Extractors"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://filmapik.singles&size=%size%",
         "fileHash": "sha256-4ffbd53287b8c7d3531cc2c548636c865af6b586a1bf30009fd4db4caf0c4687",
         "apiVersion": 1,
@@ -412,6 +624,46 @@
         "name": "Filmkita"
     },
     {
+        "iconUrl": "https://www.google.com/s2/favicons?sz=64&domain=fitnakedgirls.com",
+        "fileHash": "sha256-18b54b61fe60c02d2a1fd1d415bc72e421236f7c9202c5c5595ecce0853f05bb",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 16562,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 6,
+        "internalName": "FitNakedGirls",
+        "description": "FitNakedGirls NSFW video provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/FitNakedGirls.cs3",
+        "name": "FitNakedGirls"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=freepornvideos.xxx&sz=%size%",
+        "fileHash": "sha256-eab7d810403372061bc02b8bd6106b02784d7b809124ba911f924c0d81f472da",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 20171,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 7,
+        "internalName": "FreePornVideos",
+        "description": "Premium porn with 4K support",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/FreePornVideos.cs3",
+        "name": "FreePornVideos"
+    },
+    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://free-reels.com&size=%size%",
         "fileHash": "sha256-2b90ccc5f0be43331f8bdb4b14135a52d2c0d5540796b1a1a56fb3fc574eb26b",
         "apiVersion": 1,
@@ -431,6 +683,26 @@
         "description": "FreeReels short drama provider",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/FreeReels.cs3",
         "name": "FreeReels"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=freeuseporn.com&sz=%size%",
+        "fileHash": "sha256-84ec346476aa939006f3d5d044fbebe0d216bad7611070f5c3a7a7fd4eee9086",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 13909,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 4,
+        "internalName": "FreeUsePorn",
+        "description": "FreeUsePorn NSFW video provider",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/FreeUsePorn.cs3",
+        "name": "FreeUsePorn"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://fufafilm.com&size=%size%",
@@ -495,6 +767,171 @@
         "internalName": "GojodesuProvider",
         "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/GojodesuProvider.cs3",
         "name": "GojodesuProvider"
+    },
+    {
+        "fileHash": "sha256-f3bab198bee1f71d28182bcee411c8237c1dc38ab08e753c73df11767d5750e7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 41933,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Betbet"
+        ],
+        "tvTypes": [
+            "Anime",
+            "AnimeMovie",
+            "OVA"
+        ],
+        "version": 4,
+        "internalName": "Gomunime",
+        "description": "Gomunime provider untuk anime sub Indo dengan kategori terbaru dari website sumber.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Gomunime.cs3",
+        "name": "Gomunime"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=itoshii-movie.com&sz=%size%",
+        "fileHash": "sha256-baf9f489e02b205aa4e795fcba2c386593211cbd1932aff7b8bd654313e90c94",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 44700,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag",
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Anime",
+            "AsianDrama"
+        ],
+        "version": 5,
+        "internalName": "GudangFilm",
+        "description": "Provider CloudStream untuk GudangFilm / Dutamovie21 source.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/GudangFilm.cs3",
+        "name": "GudangFilm"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=haho.moe&sz=%size%",
+        "fileHash": "sha256-f9ba2c3a0362a1b2cdf8661221f61a785e3084ce329b631259ad2d0a203f8653",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 24406,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 10,
+        "internalName": "Hahomoe",
+        "description": "Hentai AHO Streaming",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Hahomoe.cs3",
+        "name": "Hahomoe"
+    },
+    {
+        "iconUrl": "https://happy2hub.eu/wp-content/uploads/2023/02/Logo-2x.png",
+        "fileHash": "sha256-f81969f75cde0c6d10e19f10f99e163882f2203915dbe6a6ab480c07b5f6326b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 28791,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 4,
+        "internalName": "Happy2hub",
+        "description": "Provider CloudStream untuk Happy2hub",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/Happy2hub.cs3",
+        "name": "Happy2hub"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.heavy-r.com/&size=128",
+        "fileHash": "sha256-97ade32752fceed2908cb7cd6687a9d4b0caf86b538f00fbefdcd027aab45948",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 21187,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 3,
+        "internalName": "HeavyR",
+        "description": "Heavy-R.com provider for CloudStream",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/HeavyR.cs3",
+        "name": "HeavyR"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hentaicity.com&sz=%size%",
+        "fileHash": "sha256-6e631966abc640005b2dece92afc84cc6c2e6cda743a3fec855a1f36a3a92540",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 21493,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 3,
+        "internalName": "HentaiCity",
+        "description": "Provider CloudStream untuk HentaiCity",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/HentaiCity.cs3",
+        "name": "HentaiCity"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hentaicop.com&sz=256",
+        "fileHash": "sha256-0d063ed9abfcd0b0dbd2b85a4cf66982ac8358653266cc774bbf808c390ff04b",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 46653,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "Betbet"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 5,
+        "internalName": "HentaiCop",
+        "description": "HentaiCop provider dengan struktur split dan kategori website terbaru.",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/HentaiCop.cs3",
+        "name": "HentaiCop"
+    },
+    {
+        "iconUrl": "https://t0.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://hentaiworld.tv/&size=128",
+        "fileHash": "sha256-0950f42630bedd73b2fe514c37884a27a72c8348d1ead0269009000faee78218",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/verozadi1/CloudXPro",
+        "fileSize": 23910,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "NSFW"
+        ],
+        "version": 3,
+        "internalName": "HentaiWorld",
+        "description": "Provider CloudStream untuk HentaiWorld",
+        "url": "https://raw.githubusercontent.com/verozadi1/CloudXPro/builds/HentaiWorld.cs3",
+        "name": "HentaiWorld"
     },
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://v8.hidoristream.online&size=%size%",
