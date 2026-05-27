@@ -50,23 +50,30 @@ class TVTokusatsuIndo : MainAPI() {
 
         val document = app.get(url).document
 
-        val home = document.select(".post, article, .blog-posts .post-outer").mapNotNull { post ->
+        val home = mutableListOf<SearchResponse>()
+        val seen = mutableSetOf<String>()
+
+        // Blogger posts: select only .post elements (not overlapping with article or .post-outer)
+        document.select(".post").forEach { post ->
             val title = post.selectFirst("h1, h2, h3")?.text()?.trim()
                 ?: post.selectFirst(".post-title")?.text()?.trim()
-                ?: return@mapNotNull null
+                ?: return@forEach
 
             val href = post.selectFirst("a[href]")?.attr("abs:href")
                 ?.ifBlank { post.selectFirst("a[href]")?.attr("href") }
-                ?.let(::fixUrl)
-                ?: return@mapNotNull null
+                ?: return@forEach
+
+            // Skip duplicates
+            if (href in seen) return@forEach
+            seen.add(href)
 
             val poster = post.selectFirst("img")?.let {
                 fixUrlNull(it.attr("src").ifBlank { it.attr("data-src") })
             }
 
-            newMovieSearchResponse(title, href, TvType.Movie) {
+            home.add(newMovieSearchResponse(title, fixUrl(href), TvType.Movie) {
                 this.posterUrl = poster
-            }
+            })
         }
 
         val hasNext = document.select(".blog-pager-older-link, #blog-pager a").any {
@@ -81,30 +88,34 @@ class TVTokusatsuIndo : MainAPI() {
         val q = query.trim().replace(Regex("\\s+"), "+")
         val document = app.get("$mainUrl/search?q=$q&max-results=24").document
 
-        return document.select(".post, article, .blog-posts .post-outer").mapNotNull { post ->
+        val results = mutableListOf<SearchResponse>()
+        val seen = mutableSetOf<String>()
+
+        document.select(".post").forEach { post ->
             val title = post.selectFirst("h1, h2, h3")?.text()?.trim()
                 ?: post.selectFirst(".post-title")?.text()?.trim()
                 ?: post.selectFirst("a")?.text()?.trim()
-                ?: return@mapNotNull null
+                ?: return@forEach
 
             val href = post.selectFirst("a[href]")?.attr("abs:href")
                 ?.ifBlank { post.selectFirst("a[href]")?.attr("href") }
-                ?.let(::fixUrl)
-                ?: return@mapNotNull null
+                ?: return@forEach
+
+            if (href in seen) return@forEach
+            seen.add(href)
 
             val poster = post.selectFirst("img")?.let {
                 fixUrlNull(it.attr("src").ifBlank { it.attr("data-src") })
             }
 
-            newMovieSearchResponse(title, href, TvType.Movie) {
+            results.add(newMovieSearchResponse(title, fixUrl(href), TvType.Movie) {
                 this.posterUrl = poster
-            }
+            })
         }
+        return results
     }
 
-    override suspend fun quickSearch(query: String): List<SearchResponse> {
-        return search(query)
-    }
+    override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)
 
     override suspend fun load(url: String): LoadResponse {
         val document = app.get(url).document
@@ -121,34 +132,41 @@ class TVTokusatsuIndo : MainAPI() {
         val synopsis = document.selectFirst(".post-body, .entry-content")
             ?.text()?.trim()?.takeIf { it.length > 50 }?.ifBlank { null }
 
-        // Google Drive links from post body
-        val driveLinks = document.select(".post-body a[href*=drive.google.com], .entry-content a[href*=drive.google.com]")
-        val episodeButtons = document.select(".post-body div[class] button, .entry-content div[class] button")
+        // IMPORTANT: Only parse drive links from .post-body (the actual post content)
+        // NOT from sidebar widgets like "Episode Lainnya"
+        val postBody = document.selectFirst(".post-body, .entry-content")
         val episodes = mutableListOf<Episode>()
+        val seen = mutableSetOf<String>()
 
-        if (episodeButtons.isNotEmpty()) {
-            episodeButtons.forEach { btn ->
-                val epName = btn.text().trim().ifBlank { "Episode" }
-                val driveUrl = btn.selectFirst("a[href]")?.attr("href")
+        if (postBody != null) {
+            // Look for button elements with Google Drive links inside them
+            postBody.select("div[class] button").forEach { btn ->
+                val epName = btn.text().trim()
+                if (epName.isBlank()) return@forEach
+
+                // Get the drive URL from the onclick handler or the anchor inside
+                val driveUrl = btn.selectFirst("a[href*=drive.google.com]")?.attr("href")
                     ?: btn.attr("onclick")?.let { Regex("'([^']+)'").find(it)?.groupValues?.get(1) }
                     ?: return@forEach
+
+                if (driveUrl in seen) return@forEach
+                seen.add(driveUrl)
+
                 newEpisode(driveUrl) { this.name = epName }
                     .let { episodes.add(it) }
             }
-        } else if (driveLinks.isNotEmpty()) {
-            driveLinks.forEach { link ->
-                val epName = link.parent()?.text()?.trim()?.take(80)?.ifBlank { "Movie" } ?: "Movie"
-                newEpisode(link.attr("href")) { this.name = epName }
-                    .let { episodes.add(it) }
-            }
-        }
 
-        // Fallback: any drive link on page
-        if (episodes.isEmpty()) {
-            document.select("a[href*=drive.google.com]").forEach { link ->
-                val epName = link.parent()?.text()?.trim()?.take(80)?.ifBlank { "Movie" } ?: "Movie"
-                newEpisode(link.attr("href")) { this.name = epName }
-                    .let { episodes.add(it) }
+            // If no buttons found, look for direct drive links
+            if (episodes.isEmpty()) {
+                postBody.select("a[href*=drive.google.com]").forEach { link ->
+                    val driveUrl = link.attr("href")
+                    if (driveUrl in seen) return@forEach
+                    seen.add(driveUrl)
+
+                    val epName = link.parent()?.text()?.trim()?.take(80)?.ifBlank { "Movie" } ?: "Movie"
+                    newEpisode(driveUrl) { this.name = epName }
+                        .let { episodes.add(it) }
+                }
             }
         }
 
@@ -175,6 +193,10 @@ class TVTokusatsuIndo : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        // Handle Google Drive links
+        // Format: https://drive.google.com/uc?id=FILE_ID&export=download
+        // Or: https://drive.google.com/file/d/FILE_ID/view
+
         val fileId = when {
             data.contains("/uc?id=") -> Regex("id=([a-zA-Z0-9_-]+)").find(data)?.groupValues?.get(1)
             data.contains("/file/d/") -> Regex("/file/d/([a-zA-Z0-9_-]+)").find(data)?.groupValues?.get(1)
@@ -182,6 +204,7 @@ class TVTokusatsuIndo : MainAPI() {
         }
 
         if (fileId != null) {
+            // Use Google Drive direct download URL
             val driveUrl = "https://drive.google.com/uc?id=$fileId&export=download"
             callback(
                 ExtractorLink(
@@ -196,6 +219,7 @@ class TVTokusatsuIndo : MainAPI() {
             return true
         }
 
+        // Fallback: try as direct URL
         if (data.startsWith("http")) {
             callback(
                 ExtractorLink(
